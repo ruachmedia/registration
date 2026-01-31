@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Church Media Workshop — Registration</title>
+
+  <style>
+    /* ---------- Theme tokens ---------- */
+    :root{
+      --bg: #0b0f14;
+      --surface: rgba(255,255,255,0.02);
+      --page-glass: rgba(255,255,255,0.03);
+      --card: rgba(255,255,255,0.03);
+      --muted: #9aa6b2;
+      --text: #eef6ff;
+      --accent: #2f9afe;
+      --glass-border: rgba(255,255,255,0.04);
+      --radius: 12px;
+      --shadow-strong: 0 18px 50px rgba(2,6,23,0.6);
+      --max-width: 980px;
+
+      /* header icon color (default = light-on-dark -> white) */
+      --header-icon: #ffffff;
+
+      --header-top-gap: 12px;
+      --header-height: 66px;
+    }
+
+    /* Light theme overrides */
+    html[data-theme="light"]{
+      --bg: #ffffff;
+      --surface: rgba(2,6,23,0.02);
+      --page-glass: rgba(255,255,255,0.8);
+      --card: rgba(255,255,255,0.98);
+      --muted: #475569;
+      --text: #071124;
+      --accent: #1d6ef0;
+      --glass-border: rgba(2,6,23,0.06);
+      --shadow-strong: 0 14px 40px rgba(2,6,23,0.08);
+
+      /* in light theme icons should be dark/black */
+      --header-icon: #071124;
+    }
+
+    /* ---------- Global ---------- */
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; background:var(--bg); color:var(--text); }
+    a{ color:var(--accent); text-decoration:none; }
+    button{ font:inherit; }
+
+    /* Page container with glass effect */
+    .page {
+      max-width:var(--max-width);
+      margin:14px auto;
+      background: linear-gradient(180deg, var(--page-glass), rgba(255,255,255,0.02));
+      border-radius:16px;
+      overflow:visible; /* header sits above page */
+      box-shadow: var(--shadow-strong);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(6px);
+      padding-top: calc(var(--header-height) + 18px); /* allow space for fixed header */
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    /* subtle animation while scrolling */
+    body.scrolling .page {
+      transform: translateY(-6px) scale(0.9995);
+      box-shadow: 0 22px 60px rgba(2,6,23,0.12);
+    }
+
+    /* Header — fixed at top of viewport and centered with page */
+    header.topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 14px;
+      position:fixed;
+      top:var(--header-top-gap);
+      left:50%;
+      transform:translateX(-50%);
+      z-index:9999;
+      width:calc(100% - 28px);
+      max-width:var(--max-width);
+      background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+      border-bottom:1px solid rgba(255,255,255,0.02);
+      backdrop-filter: blur(6px);
+      border-radius:12px;
+      box-shadow: 0 8px 20px rgba(2,6,23,0.12);
+      transition: padding .18s ease, box-shadow .18s ease, transform .18s ease, background .18s ease;
+      will-change:transform,box-shadow;
+    }
+
+    /* Header scrolled state: slightly compact */
+    header.topbar.scrolled{
+      padding:6px 12px;
+      box-shadow: 0 20px 50px rgba(2,6,23,0.16);
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    .left, .center, .right { display:flex; align-items:center; gap:10px; }
+
+    /* hamburger and theme icon use header icon color variable */
+    header.topbar .hamburger,
+    header.topbar .theme-toggle {
+      color: var(--header-icon);
+    }
+
+    header.topbar .logo {
+      height:56px;
+      width:auto;
+      border-radius:10px;
+      object-fit:cover;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      transition: height .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    /* shrink logo when header scrolled */
+    header.topbar.scrolled .logo{ height:44px; }
+
+    /* Hamburger */
+    .hamburger{
+      width:46px;height:46px;
+      display:flex;align-items:center;justify-content:center;
+      background:transparent;
+      border-radius:10px;
+      border:1px solid transparent;
+      cursor:pointer;
+      transition:transform .18s ease, background .18s ease;
+    }
+    .hamburger:active{ transform:scale(.98); }
+    .hamburger:focus{ outline:2px solid rgba(47,154,254,0.13); border-color:rgba(47,154,254,0.12); }
+
+    .theme-toggle{
+      width:44px;height:44px;border-radius:10px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    }
+
+    /* Main content - mobile-first single column */
+    .content {
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    /* Center the main headings as requested */
+    .content > section > h3,
+    #coverage > h3,
+    #experience > h3,
+    #workshop-details > h3,
+    #registration > h3 {
+      text-align:center;
+      margin:6px 0 10px 0;
+      color:var(--text);
+    }
+
+    /* Hero / headline (no-wrap title) */
+    .hero {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border-radius:12px;
+      padding:16px;
+      text-align:center;
+      overflow:hidden;
+      position:relative;
+      border:1px solid var(--glass-border);
+    }
+
+    .title-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; justify-content:center; }
+    .title {
+      font-weight:900;
+      color:var(--text);
+      margin:0;
+      white-space:nowrap;          /* do not wrap */
+      font-size: clamp(20px, 7.6vw, 36px); /* responsive size */
+      line-height:1;
+      letter-spacing:0.6px;
+      text-align:center;
+      padding:0 12px;
+    }
+
+    .hosted {
+      font-weight:600;
+      color:var(--muted);
+      font-size:11px;
+      margin:0;
+      text-align:center;
+    }
+
+    /* Images with subtle shadow */
+    .hero-image, .full-image{
+      width:100%;
+      display:block;
+      margin-top:14px;
+      border-radius:10px;
+      box-shadow: 0 12px 30px rgba(2,6,23,0.35);
+      border:1px solid rgba(255,255,255,0.03);
+      object-fit:cover;
+      max-height:360px;
+      transition: transform .25s ease;
+    }
+
+    /* small parallax effect on images while scrolling (JS toggles body.scrolling) */
+    body.scrolling .hero-image,
+    body.scrolling .full-image {
+      transform: translateY(-8px) scale(1.002);
+    }
+
+    .verse{
+      margin-top:12px;
+      font-weight:700;
+      color:var(--text);
+      font-size:15px;
+    }
+    .verse .ref{ font-weight:600; color:var(--muted); display:block; margin-top:6px; font-size:13px; }
+
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+
+    /* small register button under lead */
+    .anchor-register{
+      margin-top:12px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:9px;
+      background:linear-gradient(180deg,var(--accent), #0b6fe6);
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      border:0;
+      text-decoration:none;
+      box-shadow: 0 10px 28px rgba(47,154,254,0.18);
+      white-space:nowrap;
+    }
+
+    /* What we're covering: grid of boxes */
+    .cover-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width:640px){ .cover-grid{ grid-template-columns:1fr; } }
+
+    .cover-box{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      border-radius:12px;
+      padding:12px;
+      border:1px solid var(--glass-border);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      transition:transform .22s ease, box-shadow .22s ease;
+      cursor:default;
+      min-height:70px;
+    }
+    .cover-box:hover{ transform:translateY(-6px); box-shadow: 0 14px 30px rgba(2,6,23,0.12); }
+
+    .cover-deco{
+      width:46px;height:46px;border-radius:8px;background:linear-gradient(180deg,var(--accent), #0b6fe6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex:0 0 46px; font-size:16px;
+      box-shadow: 0 8px 20px rgba(2,6,23,0.25);
+    }
+    .cover-content h4{ margin:0; font-size:15px; color:var(--text); text-align:left; }
+    .cover-content p{ margin:6px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
+
+    /* Workshop details card (more prominent boxed look) */
+    .details-card{
+      margin-top:10px;
+      border-radius:12px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px solid var(--glass-border);
+      box-shadow: 0 8px 26px rgba(2,6,23,0.06);
+    }
+    .details-card h3{ margin:0 0 8px 0; }
+    .details-card p{ margin:0; color:var(--muted); font-size:14px; }
+
+    /* details grid with separate boxes */
+    .details-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+    .detail-item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid var(--glass-border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      box-shadow: 0 8px 20px rgba(2,6,23,0.04);
+      min-height:72px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .detail-item:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px rgba(2,6,23,0.08); }
+
+    .detail-icon{
+      width:54px;height:54px;border-radius:10px;background:linear-gradient(180deg,var(--accent), #0b6fe6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex:0 0 54px; font-size:18px;
+      box-shadow: 0 8px 22px rgba(2,6,23,0.18);
+    }
+    .detail-content{ display:flex; flex-direction:column; gap:4px; }
+    .detail-content strong{ font-size:13px; color:var(--muted); }
+    .detail-main{ font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } /* non-wrapping slightly smaller */
+    .detail-sub{ color:var(--muted); font-size:12px; }
+
+    /* Form */
+    .form-card{
+      margin-top:6px;
+      border-radius:12px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px solid var(--glass-border);
+      box-shadow: 0 8px 26px rgba(2,6,23,0.08);
+    }
+    .form-card h3{ margin:0 0 6px 0; font-size:18px; color:var(--text); }
+    .muted-note{ color:var(--muted); font-size:13px; margin-bottom:8px; }
+
+    .field{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+    label{ font-size:13px; color:var(--text); font-weight:700; }
+
+    /* Input styles - in light theme make inputs white for contrast */
+    input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+      padding:10px 12px; border-radius:10px; border:1px solid var(--glass-border);
+      background: rgba(255,255,255,0.02); color:var(--text); font-size:14px; outline:none;
+    }
+    input:focus, textarea:focus { box-shadow: 0 10px 30px rgba(47,154,254,0.12); border-color:var(--accent); }
+
+    html[data-theme="light"] input[type="text"], html[data-theme="light"] input[type="email"], html[data-theme="light"] input[type="tel"], html[data-theme="light"] select, html[data-theme="light"] textarea {
+      background: #ffffff;
+      color: var(--text);
+      border:1px solid rgba(2,6,23,0.06);
+    }
+    html[data-theme="light"] .form-card { background: linear-gradient(180deg,#fff,#fbfdff); }
+
+    /* Role options - boxed selectable layout (no symbol icons; dot marks cell) */
+    .role-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:8px; }
+    @media (max-width:640px){ .role-grid{ grid-template-columns:1fr; } }
+
+    .option{ position:relative; display:block; cursor:pointer; }
+    .option input{
+      position:absolute;
+      left:8px;
+      top:50%;
+      transform:translateY(-50%);
+      width:18px;
+      height:18px;
+      margin:0;
+      opacity:0; /* visually hidden but accessible */
+      z-index:3;
+    }
+
+    .option-card{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px 14px 10px 56px; /* leave room for custom dot on left */
+      border-radius:10px;
+      border:1px solid var(--glass-border);
+      background: transparent;
+      transition: box-shadow .18s ease, border-color .18s ease, background .18s ease, transform .12s ease;
+      position:relative;
+      min-height:56px;
+    }
+    .option-card:hover{ transform:translateY(-3px); box-shadow: 0 12px 30px rgba(2,6,23,0.06); }
+
+    /* custom radio circle + dot */
+    .option-card::before{
+      content: "";
+      position:absolute;
+      left:18px;
+      top:50%;
+      transform:translateY(-50%);
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:transparent;
+      border:2px solid var(--glass-border);
+      z-index:2;
+      transition: border-color .12s ease, background .12s ease;
+    }
+    .option-card::after{
+      content: "";
+      position:absolute;
+      left:23px;
+      top:50%;
+      transform:translateY(-50%) scale(0);
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--accent);
+      z-index:2;
+      transition: transform .12s ease;
+    }
+
+    .option input:checked + .option-card{
+      border-color:var(--accent);
+      background: linear-gradient(180deg, rgba(47,154,254,0.05), rgba(47,154,254,0.02));
+      box-shadow: 0 12px 34px rgba(47,154,254,0.08);
+    }
+    .option input:checked + .option-card::before{
+      border-color:var(--accent);
+      background: rgba(47,154,254,0.04);
+    }
+    .option input:checked + .option-card::after{
+      transform:translateY(-50%) scale(1);
+    }
+
+    .opt-text{ display:flex; flex-direction:column; min-width:0; align-items:flex-start; }
+    .opt-text strong{ font-size:14px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
+    .opt-text small{ color:var(--muted); font-size:12px; margin-top:4px; text-align:left; }
+
+    /* Submit: centered and no wrap */
+    .submit-wrap{ display:flex; justify-content:center; margin-top:12px; }
+    .submit-btn{
+      background:linear-gradient(180deg,var(--accent), #0b6fe6);
+      color:white; border:0; padding:10px 18px; border-radius:10px; font-weight:800; cursor:pointer;
+      white-space:nowrap;
+    }
+
+    /* Footer */
+    footer{ margin-top:12px; padding:12px 18px; text-align:center; color:var(--muted); font-size:13px; border-top:1px solid rgba(255,255,255,0.02); }
+
+    /* Slide-in menu overlay and panel */
+    .menu-overlay{
+      position:fixed; inset:0; z-index:300; display:none;
+      background: rgba(2,4,8,0.45); backdrop-filter: blur(6px);
+    }
+    .menu-panel{
+      position:fixed; left:0; top:0; bottom:0; width:80vw;
+      max-width:420px; background:var(--card); padding:18px; transform:translateX(-110%); transition:transform .34s cubic-bezier(.2,.9,.2,1);
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6); border-right:1px solid var(--glass-border);
+      border-radius:0 14px 14px 0;
+    }
+    .menu-panel.open{ transform:translateX(0); }
+    .menu-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:18px; }
+    .menu-list{ display:flex; flex-direction:column; gap:12px; }
+    .menu-item{ padding:12px 10px; border-radius:10px; font-weight:800; color:var(--text); cursor:pointer; background:transparent; border:1px solid transparent; }
+    .menu-item:hover{ background:rgba(255,255,255,0.02); transform:translateX(4px); }
+
+    .close-btn-icon{ width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:transparent; border:1px solid transparent; cursor:pointer; color:var(--text); }
+
+    /* Contact modal */
+    .modal {
+      position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96);
+      min-width:300px; max-width:90%; z-index:320; padding:16px; border-radius:12px; background:var(--card);
+      box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; transition:transform .18s ease, opacity .18s ease; opacity:0;
+      border:1px solid var(--glass-border);
+    }
+    .modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+    .modal h4{ margin:0 0 8px 0; }
+    .modal .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+
+    /* Reveal animations */
+    .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; will-change:transform,opacity; }
+    .reveal.in-view{ opacity:1; transform:none; }
+
+    /* Responsive tweaks */
+    @media (max-width:980px){
+      .page{ margin:8px; border-radius:12px; }
+      .hero-image, .full-image{ max-height:260px; }
+      .menu-panel{ max-width:92vw; width:92vw; }
+      header.topbar{ left:50%; transform:translateX(-50%); width:calc(100% - 32px); padding:10px; }
+    }
+
+    @media (max-width:480px){
+      .logo{ height:48px; }
+      header.topbar{ padding:10px; }
+      .title{ font-size: clamp(18px, 9.4vw, 28px); }
+      .hero-image, .full-image{ max-height:220px; border-radius:10px; }
+      .detail-main{ white-space:normal; } /* allow wrap on very narrow screens */
+      .role-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page" role="main" aria-label="Church Media Workshop registration page">
+
+    <header class="topbar" role="banner" aria-label="Top navigation">
+      <div class="left">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" title="Open menu">
+          <!-- hamburger uses currentColor so it follows --header-icon -->
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect y="1" width="20" height="2" rx="1" fill="currentColor"/>
+            <rect y="6" width="20" height="2" rx="1" fill="currentColor" opacity="0.85"/>
+            <rect y="11" width="20" height="2" rx="1" fill="currentColor" opacity="0.7"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="center" style="flex:1; justify-content:center; position:relative;">
+        <!-- centered top logo -->
+        <img class="logo" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/WhatsApp%20Image%202026-01-27%20at%2023.05.12.jpeg" alt="Ruach Media logo">
+      </div>
+
+      <div class="right">
+        <!-- theme toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+          <!-- uses currentColor -->
+          <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- HERO -->
+      <section id="home" class="hero reveal">
+        <div class="title-container">
+          <div class="title-wrap">
+            <h1 class="title" aria-live="polite">CHURCH MEDIA WORKSHOP</h1>
+            <div class="hosted">Hosted by Ruach Media and Production</div>
+          </div>
+        </div>
+
+        <img class="hero-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/digital-mixer-recording-studio-with-computer-recording-sounds-music-concept-creativity-show-business.webp"
+             alt="Digital mixer and recording studio" loading="lazy">
+
+        <div class="verse reveal">"So faith comes from hearing, and hearing through the word of Christ." <span class="ref">Romans 10:17</span></div>
+
+        <p class="lead reveal">
+Are you ready to take your church’s production to the next level?
+Join Ruach Media and Production for an intensive, one-day,
+hands-on workshop designed specifically for church media teams
+and volunteers.
+        </p>
+
+        <div class="reveal">
+          <button class="anchor-register" id="scrollRegisterBtn" aria-label="Register now">Register</button>
+        </div>
+      </section>
+
+      <!-- WHAT WE'RE COVERING -->
+      <section id="coverage" class="reveal">
+        <h3>What We’re Covering</h3>
+
+        <div class="cover-grid" id="coverGrid">
+          <div class="cover-box reveal">
+            <div class="cover-deco">LS</div>
+            <div class="cover-content">
+              <h4>Live Sound Fundamentals</h4>
+              <p>Foundations and practical tips to build consistent mixes each Sunday.</p>
+            </div>
+          </div>
+
+          <div class="cover-box reveal">
+            <div class="cover-deco">MM</div>
+            <div class="cover-content">
+              <h4>Mixing Mastery</h4>
+              <p>Deep dive into Analog Mixers and a masterclass on the Soundcraft Ui24R.</p>
+            </div>
+          </div>
+
+          <div class="cover-box reveal">
+            <div class="cover-deco">SP</div>
+            <div class="cover-content">
+              <h4>System Processing</h4>
+              <p>Crossovers and DriveRack settings for crystal-clear audio.</p>
+            </div>
+          </div>
+
+          <div class="cover-box reveal">
+            <div class="cover-deco">VM</div>
+            <div class="cover-content">
+              <h4>Visual Ministry</h4>
+              <p>Professional camera handling and dynamic Bible Presentation techniques.</p>
+            </div>
+          </div>
+
+          <div class="cover-box reveal">
+            <div class="cover-deco">DO</div>
+            <div class="cover-content">
+              <h4>Digital Outreach</h4>
+              <p>Setting up and managing a high-quality live stream for your church.</p>
+            </div>
+          </div>
+
+          <div class="cover-box reveal">
+            <div class="cover-deco">GD</div>
+            <div class="cover-content">
+              <h4>Graphic Design</h4>
+              <p>Creating impactful posters and visuals for your congregation.</p>
+            </div>
+          </div>
+        </div>
+
+        <img class="full-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/Waves.jpg.jpeg" alt="Waves artwork" loading="lazy">
+      </section>
+
+      <!-- THE WORKSHOP EXPERIENCE -->
+      <section id="experience" class="reveal">
+        <h3>The Workshop Experience</h3>
+        <p class="lead">
+This isn't just a lecture. You will get one full day of hands-on experience with
+professional equipment. Whether you are a beginner looking to learn the basics or
+a veteran technician looking to sharpen your skills, there is a seat for you at the
+console.
+        </p>
+
+        <img class="full-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/UI24R-No-Talent_original%20(1).jpeg" alt="Soundcraft Ui24R" loading="lazy">
+      </section>
+
+      <!-- WORKSHOP DETAILS -->
+      <section id="workshop-details" class="details-card reveal" aria-labelledby="workshopHeading">
+        <h3 id="workshopHeading">Workshop Details</h3>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 11h5v5H7z" fill="rgba(255,255,255,0.95)"></path>
+                <path d="M8 2v2M16 2v2M3 7h18M5 21h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Date</strong>
+              <div class="detail-main">[Insert Date — e.g. Sat 14 Feb 2026]</div>
+              <div class="detail-sub">Full day, hands-on sessions</div>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 7v6l4 2" stroke="rgba(255,255,255,0.95)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="8" stroke="rgba(255,255,255,0.95)" stroke-width="1.3"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Check‑in</strong>
+              <div class="detail-main">8:45 AM — Session starts 9:00 AM</div>
+              <div class="detail-sub">Please arrive early to register</div>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 11.5a2 2 0 100-4 2 2 0 000 4z" fill="rgba(255,255,255,0.95)"/>
+                <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Location</strong>
+              <div class="detail-main">[Insert Church / Venue Address]</div>
+              <div class="detail-sub">Limited seating — register early</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REGISTRATION FORM -->
+      <section id="registration" class="form-card reveal" aria-labelledby="regHeading">
+        <h3 id="regHeading">Registration Form</h3>
+        <div class="muted-note">Please fill out your details below. Seats are limited.</div>
+
+        <form id="registration-form" autocomplete="on" onsubmit="submitForm(event)">
+
+          <div class="field">
+            <label for="fullName">Full Name *</label>
+            <input id="fullName" name="fullName" type="text" required placeholder="Jane Doe">
+          </div>
+
+          <div class="field" style="display:flex; gap:8px;">
+            <div style="flex:1;">
+              <label for="phone">Phone Number</label>
+              <input id="phone" name="phone" type="tel" pattern="\+?[0-9\s\-()]{7,}" placeholder="+123 456 7890">
+            </div>
+            <div style="flex:1;">
+              <label for="email">Email Address *</label>
+              <input id="email" name="email" type="email" required placeholder="you@example.com">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="church">Home Church / Organization</label>
+            <input id="church" name="church" type="text" placeholder="Your church or organization">
+          </div>
+
+          <div class="field">
+            <label>Skill Level & Interest — What is your primary role? *</label>
+            <div class="role-grid" role="radiogroup" aria-required="true">
+              <label class="option" aria-label="Audio Engineer">
+                <input type="radio" name="role" value="Audio Engineer" required>
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Audio Engineer</strong><small>Live sound, mixing</small></div>
+                </div>
+              </label>
+
+              <label class="option" aria-label="Visual / Camera Operator">
+                <input type="radio" name="role" value="Visual/Camera Operator">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Visual / Camera Operator</strong><small>Cameras, framing</small></div>
+                </div>
+              </label>
+
+              <label class="option" aria-label="Media / Graphics">
+                <input type="radio" name="role" value="Media/Graphics">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Media / Graphics</strong><small>Posters, overlays</small></div>
+                </div>
+              </label>
+
+              <label class="option" aria-label="Church Leadership / Other">
+                <input type="radio" name="role" value="Church Leadership/Other">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Church Leadership / Other</strong><small>Coordination & support</small></div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="submit-wrap">
+            <button type="submit" class="submit-btn">Submit Registration</button>
+          </div>
+
+          <div id="form-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
+
+          <div style="margin-top:8px; font-size:13px; color:var(--muted); text-align:center;">
+            By submitting you agree to be contacted with workshop updates.
+          </div>
+        </form>
+      </section>
+
+      <footer class="reveal">
+        © Ruach Media and Production — All rights reserved • Questions? <a href="mailto:info@ruachmedia.example">info@ruachmedia.example</a>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Slide-in menu overlay -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <nav class="menu-panel" role="navigation" aria-label="Main menu" id="menuPanel">
+      <div class="menu-header">
+        <strong style="font-size:16px; color:var(--text);">Menu</strong>
+        <button class="close-btn-icon" id="menuCloseBtn" aria-label="Close menu">
+          <!-- left arrow icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="menu-list" role="menu">
+        <div class="menu-item" data-target="home" role="menuitem">Home</div>
+        <div class="menu-item" data-target="registration" role="menuitem">Registration</div>
+        <div class="menu-item" data-target="workshop-details" role="menuitem">Workshop Details</div>
+        <div class="menu-item" id="contactItem" role="menuitem">Contact</div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Contact modal -->
+  <div class="modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <h4 id="contactTitle">Contact — We'll reply shortly</h4>
+    <p style="margin:6px 0 8px 0; color:var(--muted); font-size:13px;">Enter your email and we'll get back to you.</p>
+
+    <div>
+      <label for="contactEmail" style="font-size:13px;">Email</label>
+      <input id="contactEmail" type="email" placeholder="you@example.com" style="width:100%; margin-top:6px; padding:10px; border-radius:8px; background:transparent; color:var(--text); border:1px solid var(--glass-border);">
+    </div>
+
+    <div class="modal-actions" style="margin-top:12px;">
+      <button id="contactCancel" class="close-btn-icon" aria-label="Cancel">Cancel</button>
+      <button id="contactSubmit" class="submit-btn">Submit</button>
+    </div>
+
+    <div id="contactStatus" aria-live="polite" style="margin-top:10px; font-size:13px;"></div>
+  </div>
+
+  <!-- Firebase (Realtime DB) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    /*************************************************************************
+     * Kept functionality; added:
+     * - header scrolled animation (shrink + stronger shadow)
+     * - body.scrolling class during scroll for page/image subtle animation
+     * - header icons follow --header-icon var (black in light, white in dark)
+     * - clicking option labels toggles radios (full cell marks)
+     *************************************************************************/
+
+    // Firebase config & init (unchanged)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCWDx1Sj-S2liB2eI5h6pi4JwCxUokRDpw",
+      authDomain: "newreservation-f307f.firebaseapp.com",
+      databaseURL: "https://newreservation-f307f-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "newreservation-f307f",
+      storageBucket: "newreservation-f307f.firebasestorage.app",
+      messagingSenderId: "62177167686",
+      appId: "1:62177167686:web:db2b353710dab365e3bd47",
+      measurementId: "G-7DV9CVE3TM"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const registrationsRef = db.ref('registrations');
+    const contactsRef = db.ref('contacts');
+
+    // Menu open/close
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuPanel = document.getElementById('menuPanel');
+    const menuCloseBtn = document.getElementById('menuCloseBtn');
+
+    function openMenu(){
+      menuOverlay.style.display = 'block';
+      requestAnimationFrame(()=> menuPanel.classList.add('open'));
+      menuOverlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu(){
+      menuPanel.classList.remove('open');
+      menuOverlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      setTimeout(()=> menuOverlay.style.display = 'none', 380);
+    }
+
+    hamburgerBtn.addEventListener('click', openMenu);
+    menuCloseBtn.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', (e)=>{
+      if(e.target === menuOverlay) closeMenu();
+    });
+
+    // Menu item clicks -> scroll
+    document.querySelectorAll('.menu-item').forEach(item=>{
+      item.addEventListener('click', (ev)=>{
+        const target = item.getAttribute('data-target');
+        closeMenu();
+        if(target){
+          const el = document.getElementById(target);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        } else if(item.id === 'contactItem'){
+          openContactModal();
+        }
+      });
+    });
+
+    // Anchor register under hero scrolls to registration form
+    document.getElementById('scrollRegisterBtn').addEventListener('click', ()=>{
+      const reg = document.getElementById('registration');
+      if(reg) reg.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    // Contact modal
+    const contactModal = document.getElementById('contactModal');
+    const contactEmail = document.getElementById('contactEmail');
+    const contactSubmit = document.getElementById('contactSubmit');
+    const contactCancel = document.getElementById('contactCancel');
+    const contactStatus = document.getElementById('contactStatus');
+
+    function openContactModal(){
+      contactEmail.value = '';
+      contactStatus.textContent = '';
+      contactModal.classList.add('open');
+      contactModal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      setTimeout(()=> contactEmail.focus(), 220);
+    }
+    function closeContactModal(){
+      contactModal.classList.remove('open');
+      setTimeout(()=> { contactModal.style.display = 'none'; }, 220);
+      document.body.style.overflow = '';
+    }
+
+    contactCancel.addEventListener('click', closeContactModal);
+
+    contactSubmit.addEventListener('click', ()=>{
+      const email = (contactEmail.value || '').trim();
+      if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+        contactStatus.style.color = 'var(--accent)';
+        contactStatus.textContent = 'Please enter a valid email.';
+        return;
+      }
+      contactStatus.style.color = 'var(--muted)';
+      contactStatus.textContent = 'Sending...';
+
+      contactsRef.push({ email, submittedAt: new Date().toISOString() })
+        .then(()=>{
+          contactStatus.style.color = 'limegreen';
+          contactStatus.textContent = 'Thank you — we will reply you shortly.';
+          setTimeout(closeContactModal, 1400);
+        })
+        .catch(err=>{
+          console.error(err);
+          contactStatus.style.color = '#f59e0b';
+          contactStatus.textContent = 'Could not submit. Please try later.';
+        });
+    });
+
+    // Theme toggle (updates data-theme and keeps header icons in sync via CSS variable)
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+
+    function setTheme(name){
+      if(name === 'light'){
+        document.documentElement.setAttribute('data-theme','light');
+        themeIcon.innerHTML = '<path d="M12 4.5V3m0 18v-1.5M4.5 12H3m18 0h-1.5M5.64 5.64 4.22 4.22M19.78 19.78l-1.42-1.42M19.78 4.22 18.36 5.64M4.22 19.78 5.64 18.36" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><circle cx="12" cy="12" r="3" fill="currentColor"/>';
+        localStorage.setItem('theme','light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>';
+        localStorage.setItem('theme','dark');
+      }
+      // no need to explicitly update icon color; CSS var --header-icon handles it
+    }
+
+    const stored = localStorage.getItem('theme');
+    if(stored) setTheme(stored);
+    else setTheme(prefersLight ? 'light' : 'dark');
+
+    themeToggle.addEventListener('click', ()=>{
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      setTheme(isLight ? 'dark' : 'light');
+    });
+
+    // Registration form submit
+    function submitForm(e){
+      e.preventDefault();
+      const statusEl = document.getElementById('form-status');
+      statusEl.textContent = '';
+      statusEl.style.color = 'var(--muted)';
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const church = document.getElementById('church').value.trim();
+      const role = document.querySelector('input[name="role"]:checked') ? document.querySelector('input[name="role"]:checked').value : '';
+
+      if(!fullName || !email || !role){
+        statusEl.textContent = 'Please complete required fields.';
+        statusEl.style.color = '#f87171';
+        return;
+      }
+
+      const payload = { fullName, phone, email, church, role, submittedAt: new Date().toISOString() };
+      registrationsRef.push(payload)
+        .then(()=>{
+          statusEl.textContent = 'Registration submitted — thank you!';
+          statusEl.style.color = 'limegreen';
+          document.getElementById('registration-form').reset();
+          window.scrollBy({ top: -30, behavior: 'smooth' });
+        })
+        .catch(err=>{
+          console.error('Firebase write error', err);
+          statusEl.textContent = 'Sorry — could not submit. Please try again later.';
+          statusEl.style.color = '#f59e0b';
+        });
+    }
+    window.submitForm = submitForm;
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+      });
+    }, { root:null, rootMargin:'0px', threshold:0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // lazy load images with data-src
+    document.querySelectorAll('img[data-src]').forEach(img=>{
+      const src = img.getAttribute('data-src');
+      if(src) img.src = src;
+    });
+
+    // tighten title if it overflows
+    (function adjustTitle(){
+      const title = document.querySelector('.title');
+      if(!title) return;
+      const containerW = title.parentElement.clientWidth;
+      requestAnimationFrame(()=> {
+        let fs = parseFloat(window.getComputedStyle(title).fontSize);
+        let attempts = 0;
+        while(title.scrollWidth > containerW - 12 && attempts < 12 && fs > 12){
+          fs = Math.max(12, fs - 1);
+          title.style.fontSize = fs + 'px';
+          attempts++;
+        }
+      });
+    })();
+
+    // keyboard: ESC closes modal/menu
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        if(contactModal.classList.contains('open')) closeContactModal();
+        if(menuPanel.classList.contains('open')) closeMenu();
+      }
+    });
+
+    // clicking the visual card toggles the radio for full-cell selection
+    document.querySelectorAll('.option').forEach(label => {
+      label.addEventListener('click', (ev) => {
+        // prevent toggling when clicking the input itself twice
+        const radio = label.querySelector('input[type="radio"]');
+        if(radio && !radio.checked){
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+
+    // Header + page animation on scroll:
+    (function headerScrollHandler(){
+      const header = document.querySelector('header.topbar');
+      let ticking = false;
+      let scrollTimer = null;
+
+      window.addEventListener('scroll', () => {
+        if(!ticking){
+          window.requestAnimationFrame(() => {
+            const y = window.scrollY || window.pageYOffset;
+            // toggle compact header after 30px
+            if(y > 30) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+
+            // add body.scrolling during active scroll for subtle page animation
+            document.body.classList.add('scrolling');
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(()=> {
+              document.body.classList.remove('scrolling');
+            }, 160);
+
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
