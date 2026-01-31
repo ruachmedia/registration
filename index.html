@@ -432,8 +432,16 @@
     /* Slide-in menu overlay and panel */
     .menu-overlay{
       position:fixed; inset:0; z-index:300; display:none;
-      background: rgba(2,4,8,0.45); backdrop-filter: blur(6px);
+      /* Default (dark theme): solid near-black overlay without blur */
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: none;
     }
+    /* Keep the lighter translucent + blur effect for light theme */
+    html[data-theme="light"] .menu-overlay{
+      background: rgba(2,4,8,0.45);
+      backdrop-filter: blur(6px);
+    }
+
     .menu-panel{
       position:fixed; left:0; top:0; bottom:0; width:80vw;
       max-width:420px; background:var(--card); padding:18px; transform:translateX(-110%); transition:transform .34s cubic-bezier(.2,.9,.2,1);
@@ -674,20 +682,24 @@ console.
             <input id="fullName" name="fullName" type="text" required placeholder="Jane Doe">
           </div>
 
-          <div class="field" style="display:flex; gap:8px;">
-            <div style="flex:1;">
-              <label for="phone">Phone Number</label>
-              <input id="phone" name="phone" type="tel" pattern="\+?[0-9\s\-()]{7,}" placeholder="+123 456 7890">
-            </div>
-            <div style="flex:1;">
-              <label for="email">Email Address *</label>
-              <input id="email" name="email" type="email" required placeholder="you@example.com">
-            </div>
+          <div class="field">
+            <label for="phone">Phone Number</label>
+            <input id="phone" name="phone" type="tel" pattern="\+?[0-9\s\-()]{7,}" placeholder="+123 456 7890">
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address *</label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com">
           </div>
 
           <div class="field">
             <label for="church">Home Church / Organization</label>
             <input id="church" name="church" type="text" placeholder="Your church or organization">
+          </div>
+
+          <div class="field">
+            <label for="location">Location</label>
+            <input id="location" name="location" type="text" placeholder="Town / City or venue (optional)">
           </div>
 
           <div class="field">
@@ -793,6 +805,9 @@ console.
      * - body.scrolling class during scroll for page/image subtle animation
      * - header icons follow --header-icon var (black in light, white in dark)
      * - clicking option labels toggles radios (full cell marks)
+     * - added location field and included it in submission payload
+     * - menu overlay: dark theme now uses solid near-black background without blur;
+     *   light theme keeps translucent + blur.
      *************************************************************************/
 
     // Firebase config & init (unchanged)
@@ -940,6 +955,7 @@ console.
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
       const church = document.getElementById('church').value.trim();
+      const location = document.getElementById('location') ? document.getElementById('location').value.trim() : '';
       const role = document.querySelector('input[name="role"]:checked') ? document.querySelector('input[name="role"]:checked').value : '';
 
       if(!fullName || !email || !role){
@@ -948,7 +964,7 @@ console.
         return;
       }
 
-      const payload = { fullName, phone, email, church, role, submittedAt: new Date().toISOString() };
+      const payload = { fullName, phone, email, church, location, role, submittedAt: new Date().toISOString() };
       registrationsRef.push(payload)
         .then(()=>{
           statusEl.textContent = 'Registration submitted — thank you!';
