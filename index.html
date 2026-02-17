@@ -96,7 +96,7 @@
     header.topbar.scrolled .logo{ height:44px; }
 
     .content { padding:16px; display:flex; flex-direction:column; gap:16px; }
-    .content > section > h3, #coverage > h3, #experience > h3, #workshop-details > h3, #registration > h3 { text-align:center; margin:6px 0 10px 0; color:var(--text); }
+    .content > section > h3, #coverage > h3, #experience > h3, #workshop-details > h3, #registration > h3, #contact > h3 { text-align:center; margin:6px 0 10px 0; color:var(--text); }
     
     .hero { background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border-radius:12px; padding:16px; text-align:center; overflow:hidden; position:relative; border:1px solid var(--glass-border); }
     .title-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; justify-content:center; }
@@ -110,7 +110,11 @@
     .verse .ref{ font-weight:600; color:var(--muted); display:block; margin-top:6px; font-size:13px; }
     .lead{ margin-top:10px; color:var(--muted); font-size:14px; line-height:1.45; white-space:pre-line; }
     
-    .anchor-register{ margin-top:12px; display:inline-flex; gap:8px; align-items:center; justify-content:center; padding:8px 12px; border-radius:9px; background:linear-gradient(180deg,var(--accent), #0b6fe6); color:white; font-weight:700; cursor:pointer; border:0; text-decoration:none; box-shadow: 0 10px 28px rgba(47,154,254,0.18); white-space:nowrap; }
+    .button-group{ margin-top:16px; display:flex; flex-direction:column; gap:8px; align-items:center; }
+    .anchor-register, .anchor-check-status{ display:inline-flex; gap:8px; align-items:center; justify-content:center; padding:10px 20px; border-radius:9px; color:white; font-weight:700; cursor:pointer; border:0; text-decoration:none; box-shadow: 0 10px 28px rgba(47,154,254,0.18); white-space:nowrap; width:100%; max-width:280px; }
+    .anchor-register{ background:linear-gradient(180deg,var(--accent), #0b6fe6); }
+    .anchor-check-status{ background:linear-gradient(180deg, #10b981, #059669); }
+    .anchor-check-status:hover{ opacity:0.9; }
     
     .cover-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px; }
     @media (max-width:640px){ .cover-grid{ grid-template-columns:1fr; } }
@@ -122,6 +126,13 @@
     .cover-content h4{ margin:0; font-size:15px; color:var(--text); text-align:left; }
     .cover-content p{ margin:6px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
     
+    .contact-card{ margin-top:12px; border-radius:12px; padding:16px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.06); }
+    .contact-info{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:20px; }
+    .contact-item{ display:flex; flex-direction:column; gap:6px; }
+    .contact-item strong{ color:var(--text); font-size:14px; }
+    .contact-item p{ margin:0; color:var(--muted); font-size:14px; }
+    .contact-form{ display:flex; flex-direction:column; gap:12px; }
+
     .details-card{ margin-top:10px; border-radius:12px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.06); }
     .details-card h3{ margin:0 0 8px 0; }
     .details-card p{ margin:0; color:var(--muted); font-size:14px; }
@@ -241,6 +252,11 @@
     .error-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; }
     .error-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
     .error-icon { font-size:48px; color: #f87171; margin-bottom:10px; }
+
+    .contact-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:300px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); transition:transform .18s ease, opacity .18s ease; }
+    .contact-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+    .contact-modal h3{ margin:0 0 8px 0; color:var(--text); text-align:center; }
+    .contact-modal p{ margin:0 0 12px 0; color:var(--muted); font-size:13px; text-align:center; }
 
     .menu-overlay{
       position:fixed;
@@ -412,8 +428,9 @@
 Join Ruach Media and Production for an intensive, one-day,
 hands-on workshop designed specifically for church media teams
 and volunteers.</p>
-        <div class="reveal">
-          <button class="anchor-register" id="scrollRegisterBtn" aria-label="Register now">Register</button>
+        <div class="button-group reveal">
+          <button class="anchor-register" id="scrollRegisterBtn" aria-label="Register now">Register Now</button>
+          <button class="anchor-check-status" id="scrollCheckStatusBtn" aria-label="Check Status">Check Status</button>
         </div>
       </section>
 
@@ -601,6 +618,40 @@ and volunteers.</p>
         </form>
       </section>
 
+      <section id="contact" class="form-card reveal">
+        <h3>Contact Us</h3>
+        <div class="contact-card">
+          <div class="contact-info">
+            <div class="contact-item">
+              <strong>📞 Phone</strong>
+              <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+            </div>
+            <div class="contact-item">
+              <strong>📧 Email</strong>
+              <p><a href="mailto:info@ruachmedia.example">info@ruachmedia.example</a></p>
+            </div>
+          </div>
+
+          <div class="contact-form">
+            <div class="field">
+              <label for="contactEmail">Email Address *</label>
+              <input id="contactEmail" name="contactEmail" type="email" required placeholder="your@email.com">
+            </div>
+
+            <div class="field">
+              <label for="contactMessage">Your Message *</label>
+              <textarea id="contactMessage" name="contactMessage" required placeholder="Tell us your question or concern..." style="min-height:120px; resize:vertical;"></textarea>
+            </div>
+
+            <div class="submit-wrap">
+              <button type="button" class="submit-btn" id="contactSubmitBtn">Send Message</button>
+            </div>
+
+            <div id="contact-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
+          </div>
+        </div>
+      </section>
+
       <footer class="reveal">
         © Ruach Media and Production — All rights reserved • Questions? <a href="mailto:info@ruachmedia.example">info@ruachmedia.example</a>
       </footer>
@@ -621,8 +672,9 @@ and volunteers.</p>
 
       <div class="menu-list" role="menu">
         <div class="menu-item" data-target="home" role="menuitem">Home</div>
-        <div class="menu-item" data-target="registration" role="menuitem">Register</div>
-        <div class="menu-item" id="checkStatusItem" role="menuitem">Check Status</div>
+        <div class="menu-item" data-target="registration" role="menuitem">Registration Form</div>
+        <div class="menu-item" data-target="workshop-details" role="menuitem">Workshop Details</div>
+        <div class="menu-item" data-target="contact" role="menuitem">Contact Us</div>
       </div>
     </nav>
   </div>
@@ -664,6 +716,22 @@ and volunteers.</p>
     <h3 style="margin:0 0 8px 0; color:var(--text);">Email Already Registered</h3>
     <p id="errorDetails" style="margin:8px 0; color:var(--muted); font-size:13px;"></p>
     <button class="submit-btn" id="errorDoneBtn" style="margin-top:16px;">OK</button>
+  </div>
+
+  <!-- Contact Success Modal -->
+  <div class="contact-modal" id="contactSuccessModal">
+    <button class="modal-close-btn" id="contactModalCloseBtn" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6L18 18"/>
+      </svg>
+    </button>
+    <div style="font-size:48px; color:#10b981; text-align:center; margin-bottom:12px;">✓</div>
+    <h3>Thank You for Reaching Out!</h3>
+    <p>We've received your message and will get back to you as soon as possible. Our team typically responds within 24-48 hours during business hours.</p>
+    <p style="margin-top:12px; color:var(--accent); font-weight:700;">We appreciate your interest in the Church Media Workshop.</p>
+    <div style="margin-top:16px; text-align:center;">
+      <button class="submit-btn" id="contactModalDoneBtn">Close</button>
+    </div>
   </div>
 
   <!-- Check Status Modal -->
@@ -710,6 +778,7 @@ and volunteers.</p>
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const registrationsRef = db.ref('registrations');
+    const contactsRef = db.ref('contacts');
 
     // Razorpay Key ID (LIVE)
     const RAZORPAY_KEY = 'rzp_live_SFPgatX34SQ1qU';
@@ -764,15 +833,10 @@ and volunteers.</p>
     document.querySelectorAll('.menu-item').forEach(item=>{
       item.addEventListener('click', ()=>{
         const target = item.getAttribute('data-target');
-        if(item.id === 'checkStatusItem'){
-          closeMenu();
-          openCheckStatusModal();
-        } else {
-          closeMenu();
-          if(target){
-            const el = document.getElementById(target);
-            if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-          }
+        closeMenu();
+        if(target){
+          const el = document.getElementById(target);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
         }
       });
     });
@@ -785,11 +849,20 @@ and volunteers.</p>
 
     function closeModal(modalEl){
       modalEl.classList.remove('open');
-      const anyOpen = document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open').length > 0;
+      const anyOpen = document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open, .contact-modal.open').length > 0;
       if(!anyOpen){
         document.body.classList.remove('modal-open');
       }
     }
+
+    // ===== SCROLL BUTTONS =====
+    document.getElementById('scrollRegisterBtn').addEventListener('click', function(){
+      document.getElementById('registration').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    document.getElementById('scrollCheckStatusBtn').addEventListener('click', function(){
+      openCheckStatusModal();
+    });
 
     // ===== CHECK STATUS MODAL =====
     function openCheckStatusModal(){
@@ -851,6 +924,53 @@ and volunteers.</p>
       }
     });
 
+    // ===== CONTACT FORM =====
+    document.getElementById('contactSubmitBtn').addEventListener('click', async function(){
+      const contactEmail = document.getElementById('contactEmail').value.trim();
+      const contactMessage = document.getElementById('contactMessage').value.trim();
+      const statusEl = document.getElementById('contact-status');
+
+      if(!contactEmail || !contactMessage){
+        statusEl.textContent = 'Please fill all required fields.';
+        statusEl.style.color = '#f87171';
+        return;
+      }
+
+      if(!/^\S+@\S+\.\S+$/.test(contactEmail)){
+        statusEl.textContent = 'Please enter a valid email address.';
+        statusEl.style.color = '#f87171';
+        return;
+      }
+
+      statusEl.textContent = 'Sending your message...';
+      statusEl.style.color = 'var(--muted)';
+
+      try {
+        await contactsRef.push({
+          email: contactEmail,
+          message: contactMessage,
+          submittedAt: new Date().toISOString()
+        });
+
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactMessage').value = '';
+        statusEl.textContent = '';
+        openModal(document.getElementById('contactSuccessModal'));
+      } catch(err) {
+        console.error(err);
+        statusEl.textContent = 'Could not send message. Please try again later.';
+        statusEl.style.color = '#f59e0b';
+      }
+    });
+
+    document.getElementById('contactModalCloseBtn').addEventListener('click', ()=>{
+      closeModal(document.getElementById('contactSuccessModal'));
+    });
+
+    document.getElementById('contactModalDoneBtn').addEventListener('click', ()=>{
+      closeModal(document.getElementById('contactSuccessModal'));
+    });
+
     // ===== REGISTRATION FUNCTIONALITY =====
     // Function to get next confirmation code
     async function getNextConfirmationCode() {
@@ -865,11 +985,6 @@ and volunteers.</p>
         });
       });
     }
-
-    // Scroll Register button
-    document.getElementById('scrollRegisterBtn').addEventListener('click', function(){
-      document.getElementById('registration').scrollIntoView({behavior:'smooth', block:'start'});
-    });
 
     // Form validation
     function validateRegistrationForm() {
@@ -1162,7 +1277,7 @@ and volunteers.</p>
     // keyboard: ESC closes modal/menu
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
-        document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open').forEach(m=> closeModal(m));
+        document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open, .contact-modal.open').forEach(m=> closeModal(m));
         if(menuPanel.classList.contains('open')) closeMenu();
       }
     });
