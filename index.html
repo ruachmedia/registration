@@ -25,7 +25,7 @@
     *{ box-sizing: border-box; }
     html,body{ height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; background:var(--bg); color:var(--text); }
     a{ color:var(--accent); text-decoration:none; }
-    button{ font:inherit; }
+    button{ font: inherit; }
 
     .page {
       max-width:var(--max-width);
@@ -77,7 +77,9 @@
     }
 
     .left, .center, .right { display:flex; align-items:center; gap:10px; }
-    .center { flex:1; justify-content:center; }
+    .left { flex:0 0 auto; }
+    .center { flex:1; justify-content:flex-start; }
+    .right { flex:0 0 auto; }
 
     .hamburger{
       width:46px; height:46px;
@@ -193,6 +195,7 @@
       margin: 16px 0;
       text-align: center;
       border: 2px solid #60a5fa;
+      position: relative;
     }
 
     .cert-header {
@@ -234,7 +237,7 @@
       margin-top: 10px;
     }
 
-    .download-btn {
+    .download-btn, .share-btn {
       background: #10b981;
       color: white;
       border: 0;
@@ -243,10 +246,59 @@
       font-weight: 800;
       cursor: pointer;
       margin-top: 12px;
+      margin-right: 8px;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .share-btn {
+      background: linear-gradient(180deg, #2f9afe, #0b6fe6);
     }
 
     .download-btn:hover {
       background: #059669;
+    }
+
+    .share-btn:hover {
+      opacity: 0.9;
+    }
+
+    .share-options {
+      display: none;
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.95);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px;
+      gap: 8px;
+      z-index: 10025;
+      flex-direction: column;
+      min-width: 200px;
+    }
+
+    .share-options.show {
+      display: flex;
+    }
+
+    .share-option {
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .share-option:hover {
+      background: var(--accent);
+      border-color: var(--accent);
     }
 
     .error-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; }
@@ -288,7 +340,7 @@
 
     .close-btn-icon{ width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:transparent; border:1px solid transparent; cursor:pointer; color:var(--text); }
 
-    .check-status-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:300px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:#000 !important; box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); transition:transform .18s ease, opacity .18s ease; }
+    .check-status-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:300px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:#000 !important; box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); transition:transform .18s ease, opacity .18s ease; max-height:90vh; overflow-y:auto; }
     .check-status-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
 
     .modal-close-btn {
@@ -386,19 +438,111 @@
       margin-top: 8px;
     }
 
+    .customer-accounts-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .customer-accounts-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .account-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .account-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(47,154,254,0.15);
+    }
+
+    .account-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .account-code {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(47,154,254,0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .account-status {
+      display: inline-block;
+      padding: 3px 8px;
+      background: #10b981;
+      color: white;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .account-status.pending {
+      background: #f59e0b;
+    }
+
+    .account-qr {
+      background: white;
+      padding: 8px;
+      border-radius: 6px;
+      margin: 8px 0;
+      text-align: center;
+    }
+
+    .account-qr img {
+      width: 120px;
+      height: 120px;
+    }
+
+    .account-info {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .account-info-row {
+      margin: 4px 0;
+      color: var(--muted);
+    }
+
+    .account-info-row strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
     .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; will-change:transform,opacity; }
     .reveal.in-view{ opacity:1; transform:none; }
     
     footer{ margin-top:12px; padding:12px 18px; text-align:center; color:var(--muted); font-size:13px; border-top:1px solid rgba(255,255,255,0.02); }
     
     @media (max-width:980px){ .page{ margin:8px; border-radius:12px; } .hero-image, .full-image{ max-height:260px; } header.topbar{ left:50%; transform:translateX(-50%); width:calc(100% - 32px); padding:10px; } }
-    @media (max-width:480px){ .logo{ height:48px; } header.topbar{ padding:10px; } .title{ font-size: clamp(18px, 9.4vw, 28px); white-space: normal; } .hero-image, .full-image{ max-height:220px; border-radius:10px; } .qrcode-container img { width: 120px; height: 120px; } }
+    @media (max-width:480px){ .logo{ height:48px; } header.topbar{ padding:10px; } .title{ font-size: clamp(18px, 9.4vw, 28px); white-space: normal; } .hero-image, .full-image{ max-height:220px; border-radius:10px; } .qrcode-container img { width: 120px; height: 120px; } .download-btn, .share-btn { padding: 8px 12px; font-size: 11px; margin-right: 4px; } }
   </style>
 </head>
 <body>
   <div class="page" role="main" aria-label="Church Media Workshop registration page">
     <header class="topbar" role="banner" aria-label="Top navigation">
       <div class="left">
+        <img class="logo" src="https://raw.githubusercontent.com/ruachmedia/registration/refs/heads/main/logo.png.jfif" alt="Ruach Media logo">
+      </div>
+
+      <div class="center"></div>
+
+      <div class="right">
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" title="Open menu">
           <svg id="hamburgerSvg" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect y="1" width="20" height="2" rx="1" fill="currentColor"/>
@@ -407,12 +551,6 @@
           </svg>
         </button>
       </div>
-
-      <div class="center">
-        <img class="logo" src="https://raw.githubusercontent.com/ruachmedia/registration/refs/heads/main/logo.png.jfif" alt="Ruach Media logo">
-      </div>
-
-      <div class="right"></div>
     </header>
     <main class="content">
       <section id="home" class="hero reveal">
@@ -508,7 +646,7 @@ and volunteers.</p>
             </div>
             <div class="detail-content">
               <strong>Date</strong>
-              <div class="detail-main">[Insert Date — e.g. Sat 14 Feb 2026]</div>
+              <div class="detail-main" id="workshopDate">[Insert Date]</div>
               <div class="detail-sub">Full day, hands-on sessions</div>
             </div>
           </div>
@@ -522,7 +660,7 @@ and volunteers.</p>
             </div>
             <div class="detail-content">
               <strong>Check‑in</strong>
-              <div class="detail-main">8:45 AM — Session starts 9:00 AM</div>
+              <div class="detail-main"><span id="workshopCheckin">8:45 AM</span> — Session starts <span id="workshopStart">9:00 AM</span></div>
               <div class="detail-sub">Please arrive early to register</div>
             </div>
           </div>
@@ -536,7 +674,7 @@ and volunteers.</p>
             </div>
             <div class="detail-content">
               <strong>Location</strong>
-              <div class="detail-main">[Insert Church / Venue Address]</div>
+              <div class="detail-main" id="workshopLocation">[Insert Location]</div>
               <div class="detail-sub">Limited seating — register early</div>
             </div>
           </div>
@@ -624,18 +762,18 @@ and volunteers.</p>
           <div class="contact-info">
             <div class="contact-item">
               <strong>📞 Phone</strong>
-              <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+              <p><a id="contactPhone" href="tel:+919876543210">+91 98765 43210</a></p>
             </div>
             <div class="contact-item">
               <strong>📧 Email</strong>
-              <p><a href="mailto:info@ruachmedia.example">info@ruachmedia.example</a></p>
+              <p><a id="contactEmail" href="mailto:info@ruachmedia.example">info@ruachmedia.example</a></p>
             </div>
           </div>
 
           <div class="contact-form">
             <div class="field">
-              <label for="contactEmail">Email Address *</label>
-              <input id="contactEmail" name="contactEmail" type="email" required placeholder="your@email.com">
+              <label for="contactEmailForm">Email Address *</label>
+              <input id="contactEmailForm" name="contactEmail" type="email" required placeholder="your@email.com">
             </div>
 
             <div class="field">
@@ -679,33 +817,43 @@ and volunteers.</p>
     </nav>
   </div>
 
-  <!-- Success Modal with Certificate -->
+  <!-- Success Modal with Certificate & QR Code -->
   <div class="success-modal" id="successModal">
     <div class="success-tick">✓</div>
     <h3 style="margin:0 0 8px 0; color:var(--text);">Payment Successful!</h3>
-    <p style="margin:8px 0; color:var(--muted); font-size:13px;">Your registration is complete. Here's your confirmation code:</p>
+    <p style="margin:8px 0; color:var(--muted); font-size:13px;">Your registration is complete. Scan the QR code to view your details:</p>
     
-    <div class="certificate-container">
+    <div class="certificate-container" id="certificateDiv">
       <div class="cert-header">WORKSHOP PASS</div>
       <div class="cert-code" id="confirmationCode">Ruach777001</div>
       
-      <div class="qrcode-container">
-        <img id="qrcodeImg" src="" alt="QR Code">
+      <div class="qrcode-container" id="qrcodeContainer">
+        <div id="qrcode"></div>
       </div>
       
       <div class="cert-info">
-        <div>Scan this QR code to verify your registration</div>
+        <div>👆 Scan this QR code to view full details</div>
         <div id="certUserName" style="margin-top:8px; font-weight:700; font-size:13px;"></div>
       </div>
     </div>
 
     <div id="successDetails" style="margin-top:12px;"></div>
 
-    <button class="download-btn" id="downloadCertBtn">📥 Save as Image</button>
-    <button class="submit-btn" id="successDoneBtn" style="margin-top:8px;">Done</button>
+    <div style="text-align: center;">
+      <button class="download-btn" id="downloadCertBtn">📥 Save as Image</button>
+      <button class="share-btn" id="shareBtn">📤 Share</button>
+      <div class="share-options" id="shareOptions">
+        <div class="share-option" onclick="shareToWhatsApp()">🟢 WhatsApp</div>
+        <div class="share-option" onclick="shareToFacebook()">🔵 Facebook</div>
+        <div class="share-option" onclick="shareToInstagram()">📷 Instagram</div>
+        <div class="share-option" onclick="shareToTwitter()">🐦 Twitter</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="successDoneBtn" style="margin-top:8px; width: 100%; display: block;">Done</button>
   </div>
 
-  <!-- Error Modal (Email Already Exists) -->
+  <!-- Error Modal -->
   <div class="error-modal" id="errorModal">
     <button class="modal-close-btn" id="errorCloseBtn" aria-label="Close">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -713,7 +861,7 @@ and volunteers.</p>
       </svg>
     </button>
     <div class="error-icon">⚠</div>
-    <h3 style="margin:0 0 8px 0; color:var(--text);">Email Already Registered</h3>
+    <h3 style="margin:0 0 8px 0; color:var(--text);">Error</h3>
     <p id="errorDetails" style="margin:8px 0; color:var(--muted); font-size:13px;"></p>
     <button class="submit-btn" id="errorDoneBtn" style="margin-top:16px;">OK</button>
   </div>
@@ -742,11 +890,11 @@ and volunteers.</p>
       </svg>
     </button>
     <h3 style="margin:0 0 8px 0; color:var(--text);">Check Registration Status</h3>
-    <p style="margin:8px 0 12px 0; color:var(--muted); font-size:13px;">Enter your confirmation code to check your registration status:</p>
+    <p style="margin:8px 0 12px 0; color:var(--muted); font-size:13px;">Enter your phone number or confirmation code:</p>
     
     <div class="status-input-wrap">
-      <input type="text" id="statusCodeInput" placeholder="e.g. Ruach777001" maxlength="15">
-      <button class="submit-btn" id="statusCheckBtn" style="margin-top:8px;">Check Status</button>
+      <input type="text" id="statusInput" placeholder="e.g. +91 98765 43210 or Ruach777001" maxlength="50">
+      <button class="submit-btn" id="statusCheckBtn">Check Status</button>
     </div>
 
     <div id="statusResult"></div>
@@ -779,10 +927,29 @@ and volunteers.</p>
     const db = firebase.database();
     const registrationsRef = db.ref('registrations');
     const contactsRef = db.ref('contacts');
+    const workshopRef = db.ref('workshopDetails');
 
     // Razorpay Key ID (LIVE)
     const RAZORPAY_KEY = 'rzp_live_SFPgatX34SQ1qU';
     const PAYMENT_AMOUNT = 1200 * 100; // Amount in paise
+
+    // Global variable to store current certificate data
+    let currentCertificateData = null;
+
+    // LOAD WORKSHOP DETAILS ON PAGE LOAD
+    workshopRef.on('value', snapshot => {
+      if(snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById('workshopDate').textContent = data.workshopDate || '[Insert Date]';
+        document.getElementById('workshopCheckin').textContent = data.checkinTime || '8:45 AM';
+        document.getElementById('workshopStart').textContent = data.sessionStartTime || '9:00 AM';
+        document.getElementById('workshopLocation').textContent = data.location || '[Insert Location]';
+        document.getElementById('contactPhone').href = 'tel:' + (data.contactPhone || '+919876543210');
+        document.getElementById('contactPhone').textContent = data.contactPhone || '+91 98765 43210';
+        document.getElementById('contactEmail').href = 'mailto:' + (data.contactEmail || 'info@ruachmedia.example');
+        document.getElementById('contactEmail').textContent = data.contactEmail || 'info@ruachmedia.example';
+      }
+    });
 
     // ===== MENU FUNCTIONALITY =====
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -866,11 +1033,11 @@ and volunteers.</p>
 
     // ===== CHECK STATUS MODAL =====
     function openCheckStatusModal(){
-      document.getElementById('statusCodeInput').value = '';
+      document.getElementById('statusInput').value = '';
       document.getElementById('statusResult').innerHTML = '';
       document.getElementById('statusLoading').style.display = 'none';
       openModal(document.getElementById('checkStatusModal'));
-      setTimeout(() => document.getElementById('statusCodeInput').focus(), 220);
+      setTimeout(() => document.getElementById('statusInput').focus(), 220);
     }
 
     document.getElementById('statusCloseBtn').addEventListener('click', ()=>{
@@ -878,47 +1045,165 @@ and volunteers.</p>
     });
 
     document.getElementById('statusCheckBtn').addEventListener('click', async ()=>{
-      const code = document.getElementById('statusCodeInput').value.trim().toUpperCase();
+      const input = document.getElementById('statusInput').value.trim().toUpperCase();
       const resultEl = document.getElementById('statusResult');
       const loadingEl = document.getElementById('statusLoading');
 
-      if(!code){
-        resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">Please enter a confirmation code</strong></div>';
+      if(!input){
+        resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">Please enter a phone number or confirmation code</strong></div>';
         return;
       }
 
       loadingEl.style.display = 'block';
       resultEl.innerHTML = '';
 
-      // Search in Firebase
-      registrationsRef.orderByChild('confirmationCode').equalTo(code).once('value', (snapshot)=>{
+      registrationsRef.once('value', (snapshot)=>{
         loadingEl.style.display = 'none';
 
-        if(snapshot.exists()){
-          const data = Object.values(snapshot.val())[0];
-          const statusClass = data.paid ? 'found' : 'not-found';
-          const statusBadge = data.paid ? '<span class="paid-badge">✓ PAID</span>' : '<span class="pending-badge">⏳ PENDING</span>';
+        if(!snapshot.exists()){
+          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found</strong></div>';
+          return;
+        }
 
-          resultEl.innerHTML = `
-            <div class="status-result ${statusClass}">
-              <div class="status-detail"><strong>Code:</strong> ${data.confirmationCode}</div>
-              <div class="status-detail"><strong>Name:</strong> ${data.fullName}</div>
-              <div class="status-detail"><strong>Email:</strong> ${data.email}</div>
-              <div class="status-detail"><strong>Phone:</strong> ${data.phone}</div>
-              <div class="status-detail"><strong>Church:</strong> ${data.church}</div>
-              <div class="status-detail"><strong>Role:</strong> ${data.role}</div>
-              <div class="status-detail"><strong>Amount:</strong> ₹${data.amount}</div>
-              ${statusBadge}
-            </div>
-          `;
+        const allRegistrations = [];
+        snapshot.forEach(child => {
+          allRegistrations.push({
+            id: child.key,
+            ...child.val()
+          });
+        });
+
+        // Search by confirmation code or phone number
+        let foundRecords = [];
+        
+        // Try to find by confirmation code first
+        foundRecords = allRegistrations.filter(r => r.confirmationCode && r.confirmationCode.toUpperCase() === input);
+        
+        // If not found by code, search by phone number
+        if(foundRecords.length === 0 && input.replace(/[^0-9]/g, '').length >= 7) {
+          const cleanInput = input.replace(/[^0-9]/g, '');
+          foundRecords = allRegistrations.filter(r => {
+            const cleanPhone = (r.phone || '').replace(/[^0-9]/g, '');
+            return cleanPhone.includes(cleanInput) || cleanInput.includes(cleanPhone);
+          });
+        }
+
+        if(foundRecords.length === 0){
+          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found</strong><div class="status-detail" style="margin-top:8px; color:#f87171;">Please check and try again</div></div>';
+          return;
+        }
+
+        // Display all found records
+        if(foundRecords.length === 1) {
+          displaySingleAccountWithQR(foundRecords[0], resultEl);
         } else {
-          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found with this code</strong><div class="status-detail" style="margin-top:8px; color:#f87171;">Please check the code and try again</div></div>';
+          displayMultipleAccountsWithQR(foundRecords, resultEl);
         }
       });
     });
 
+    function displaySingleAccountWithQR(record, resultEl) {
+      const statusBadge = record.paymentStatus === 'Paid' ? '<span class="paid-badge">✓ PAID</span>' : '<span class="pending-badge">⏳ PENDING</span>';
+      const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+      
+      let html = `
+        <div class="status-result found">
+          <div class="status-detail"><strong>Code:</strong> ${record.confirmationCode}</div>
+          <div class="status-detail"><strong>Name:</strong> ${record.fullName}</div>
+          <div class="status-detail"><strong>Email:</strong> ${record.email}</div>
+          <div class="status-detail"><strong>Phone:</strong> ${record.phone}</div>
+          <div class="status-detail"><strong>Church:</strong> ${record.church}</div>
+          <div class="status-detail"><strong>Location:</strong> ${record.location}</div>
+          <div class="status-detail"><strong>Role:</strong> ${record.role}</div>
+          <div class="status-detail"><strong>Amount:</strong> ₹${record.amount || 1200}</div>
+          ${statusBadge}
+          <div style="background: white; padding: 8px; border-radius: 6px; margin-top: 12px; text-align: center;" id="statusQrCode"></div>
+          <button class="submit-btn" id="doneBtn" style="margin-top:12px; width:100%;">Done</button>
+        </div>
+      `;
+      
+      resultEl.innerHTML = html;
+      
+      // Generate QR code with URL
+      new QRCode(document.getElementById('statusQrCode'), {
+        text: verificationUrl,
+        width: 150,
+        height: 150,
+        colorDark: '#000',
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      
+      document.getElementById('doneBtn').addEventListener('click', () => {
+        closeModal(document.getElementById('checkStatusModal'));
+      });
+    }
+
+    function displayMultipleAccountsWithQR(records, resultEl) {
+      let html = `
+        <div class="status-result found">
+          <div class="status-detail" style="margin-bottom:12px;">
+            <strong style="color:#10b981;">✓ Found ${records.length} account(s) with this phone number:</strong>
+          </div>
+          <div class="customer-accounts-container">
+      `;
+
+      records.forEach((record, index) => {
+        const isPaid = record.paymentStatus === 'Paid';
+        const statusBadge = isPaid ? '✓ PAID' : '⏳ PENDING';
+        const statusClass = isPaid ? 'account-status' : 'account-status pending';
+        const qrId = `statusQr_${index}`;
+        const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+
+        html += `
+          <div class="account-card">
+            <div class="account-header">
+              <div class="account-code">${record.confirmationCode}</div>
+              <span class="${statusClass}">${statusBadge}</span>
+            </div>
+            <div class="account-info">
+              <div class="account-info-row"><strong>Name:</strong> ${record.fullName}</div>
+              <div class="account-info-row"><strong>📧 Email:</strong> ${record.email}</div>
+              <div class="account-info-row"><strong>📱 Phone:</strong> ${record.phone}</div>
+              <div class="account-info-row"><strong>⛪ Church:</strong> ${record.church}</div>
+              <div class="account-info-row"><strong>📍 Location:</strong> ${record.location}</div>
+              <div class="account-info-row"><strong>🎯 Role:</strong> ${record.role}</div>
+              <div class="account-info-row"><strong>💰 Amount:</strong> ₹${record.amount || 1200}</div>
+            </div>
+            <div class="account-qr" id="${qrId}"></div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+          <button class="submit-btn" id="doneBtn" style="margin-top:12px; width:100%;">Done</button>
+        </div>
+      `;
+
+      resultEl.innerHTML = html;
+      
+      // Generate QR Codes for each account
+      records.forEach((record, index) => {
+        const qrId = `statusQr_${index}`;
+        const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+        new QRCode(document.getElementById(qrId), {
+          text: verificationUrl,
+          width: 120,
+          height: 120,
+          colorDark: '#000',
+          colorLight: '#fff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      });
+      
+      document.getElementById('doneBtn').addEventListener('click', () => {
+        closeModal(document.getElementById('checkStatusModal'));
+      });
+    }
+
     // Enter key to check status
-    document.getElementById('statusCodeInput').addEventListener('keypress', (e)=>{
+    document.getElementById('statusInput').addEventListener('keypress', (e)=>{
       if(e.key === 'Enter'){
         document.getElementById('statusCheckBtn').click();
       }
@@ -926,7 +1211,7 @@ and volunteers.</p>
 
     // ===== CONTACT FORM =====
     document.getElementById('contactSubmitBtn').addEventListener('click', async function(){
-      const contactEmail = document.getElementById('contactEmail').value.trim();
+      const contactEmail = document.getElementById('contactEmailForm').value.trim();
       const contactMessage = document.getElementById('contactMessage').value.trim();
       const statusEl = document.getElementById('contact-status');
 
@@ -952,7 +1237,7 @@ and volunteers.</p>
           submittedAt: new Date().toISOString()
         });
 
-        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactEmailForm').value = '';
         document.getElementById('contactMessage').value = '';
         statusEl.textContent = '';
         openModal(document.getElementById('contactSuccessModal'));
@@ -972,7 +1257,6 @@ and volunteers.</p>
     });
 
     // ===== REGISTRATION FUNCTIONALITY =====
-    // Function to get next confirmation code
     async function getNextConfirmationCode() {
       return new Promise((resolve) => {
         const counterRef = db.ref('counter');
@@ -986,7 +1270,6 @@ and volunteers.</p>
       });
     }
 
-    // Form validation
     function validateRegistrationForm() {
       const form = document.getElementById('registration-form');
       const fullName = form.fullName.value.trim();
@@ -1015,16 +1298,7 @@ and volunteers.</p>
       return {valid, msg};
     }
 
-    // Check if email already exists
-    async function checkEmailExists(email) {
-      return new Promise((resolve) => {
-        registrationsRef.orderByChild('email').equalTo(email).once('value', (snapshot) => {
-          resolve(snapshot.exists());
-        });
-      });
-    }
-
-    // Handle Pay Now
+    // Handle Pay Now - REMOVED EMAIL CHECK
     document.getElementById('payNowBtn').addEventListener('click', async function() {
       const statusEl = document.getElementById('form-status');
       const payBtn = document.getElementById('payNowBtn');
@@ -1036,27 +1310,10 @@ and volunteers.</p>
         return;
       }
 
-      const form = document.getElementById('registration-form');
-      const email = form.email.value.trim();
-      
-      payBtn.disabled = true;
-      statusEl.textContent = "Checking registration...";
-      statusEl.style.color = "var(--muted)";
-
-      const emailExists = await checkEmailExists(email);
-      
-      if(emailExists) {
-        payBtn.disabled = false;
-        showErrorModal(email);
-        statusEl.textContent = "";
-        return;
-      }
-
       statusEl.textContent = "Opening payment gateway...";
       statusEl.style.color = "var(--muted)";
       
       openRazorpayCheckout();
-      payBtn.disabled = false;
     });
 
     // Open Razorpay Checkout
@@ -1113,7 +1370,7 @@ and volunteers.</p>
       const payload = {
         fullName, phone, email, church, location, role,
         confirmationCode,
-        paid: true,
+        paymentStatus: 'Paid',
         paymentMethod: 'razorpay-checkout',
         razorpayPaymentId: paymentResponse.razorpay_payment_id,
         razorpayOrderId: paymentResponse.razorpay_order_id || null,
@@ -1128,7 +1385,6 @@ and volunteers.</p>
           showSuccessModal(payload);
           form.reset();
           document.getElementById('form-status').textContent = "";
-          // Reset role to default
           document.querySelector('input[name="role"][value="Church Leadership/Other"]').checked = true;
         })
         .catch(err => {
@@ -1138,7 +1394,7 @@ and volunteers.</p>
         });
     }
 
-    // Show success modal
+    // Show success modal with QR Code & Share options
     function showSuccessModal(payload) {
       const modal = document.getElementById('successModal');
       const confirmCodeEl = document.getElementById('confirmationCode');
@@ -1160,12 +1416,15 @@ and volunteers.</p>
         <div style="margin-top:8px; color:limegreen;"><strong>Status:</strong> Payment Confirmed ✓</div>
       `;
       
-      // Generate QR code
-      document.getElementById('qrcodeImg').parentElement.innerHTML = '<div id="qrcode"></div>';
+      // Store certificate data for sharing
+      currentCertificateData = payload;
       
-      const qrText = `${payload.confirmationCode}|${payload.fullName}|${payload.email}|${payload.church}|${payload.role}|PAID`;
+      // Generate QR code with verification URL
+      document.getElementById('qrcodeContainer').innerHTML = '<div id="qrcode"></div>';
+      
+      const verificationUrl = `${window.location.origin}/verify.html?code=${payload.confirmationCode}`;
       new QRCode(document.getElementById('qrcode'), {
-        text: qrText,
+        text: verificationUrl,
         width: 160,
         height: 160,
         colorDark: '#000',
@@ -1176,19 +1435,64 @@ and volunteers.</p>
       openModal(modal);
     }
 
-    // Show error modal
-    function showErrorModal(email) {
-      const modal = document.getElementById('errorModal');
-      const details = document.getElementById('errorDetails');
-      
-      details.innerHTML = `This email <strong>${email}</strong> has already been registered for the workshop. Each email can only register once. Please use a different email or contact us if you need to update your registration.`;
-      
-      openModal(modal);
+    // Share button functionality
+    document.getElementById('shareBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      const shareOptions = document.getElementById('shareOptions');
+      shareOptions.classList.toggle('show');
+    });
+
+    // Close share options when clicking outside
+    document.addEventListener('click', function(e) {
+      const shareOptions = document.getElementById('shareOptions');
+      const shareBtn = document.getElementById('shareBtn');
+      if(e.target !== shareBtn && !shareOptions.contains(e.target)) {
+        shareOptions.classList.remove('show');
+      }
+    });
+
+    // Share to WhatsApp
+    function shareToWhatsApp() {
+      if(!currentCertificateData) return;
+      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      const text = `🎉 I just registered for the Church Media Workshop!\n\n📋 Confirmation Code: ${currentCertificateData.confirmationCode}\n👤 Name: ${currentCertificateData.fullName}\n📍 Location: ${currentCertificateData.location}\n💰 Amount: ₹${currentCertificateData.amount}\n\n👉 Scan or click: ${verificationUrl}`;
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Share to Facebook
+    function shareToFacebook() {
+      if(!currentCertificateData) return;
+      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(verificationUrl)}`;
+      window.open(facebookUrl, '_blank');
+    }
+
+    // Share to Instagram
+    function shareToInstagram() {
+      if(!currentCertificateData) return;
+      const certificateDiv = document.getElementById('certificateDiv');
+      html2canvas(certificateDiv, { backgroundColor: '#000000', scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `${currentCertificateData.confirmationCode}_workshop_pass.png`;
+        link.click();
+        alert('📱 Image downloaded! Now:\n\n1. Open Instagram\n2. Create a new post\n3. Upload the image\n4. Add caption: "🎉 I just completed the Church Media Workshop! #RuachMedia #MediaWorkshop"');
+      });
+    }
+
+    // Share to Twitter
+    function shareToTwitter() {
+      if(!currentCertificateData) return;
+      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      const text = `🎉 I just registered for the Church Media Workshop with @RuachMedia! Check my registration: ${verificationUrl} #ChurchTech #MediaWorkshop`;
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      window.open(twitterUrl, '_blank');
     }
 
     // Download certificate
     document.getElementById('downloadCertBtn').addEventListener('click', async function() {
-      const certificateDiv = document.querySelector('.certificate-container');
+      const certificateDiv = document.getElementById('certificateDiv');
       const btn = document.getElementById('downloadCertBtn');
       
       btn.textContent = '⏳ Creating image...';
@@ -1221,6 +1525,7 @@ and volunteers.</p>
     // Done buttons
     document.getElementById('successDoneBtn').addEventListener('click', function(){
       closeModal(document.getElementById('successModal'));
+      document.getElementById('shareOptions').classList.remove('show');
     });
 
     document.getElementById('errorDoneBtn').addEventListener('click', function(){
