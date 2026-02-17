@@ -4,9 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Church Media Workshop — Registration</title>
-
   <style>
-    /* ---------- Theme tokens ---------- */
     :root{
       --bg: #0b0f14;
       --surface: rgba(255,255,255,0.02);
@@ -19,62 +17,31 @@
       --radius: 12px;
       --shadow-strong: 0 18px 50px rgba(2,6,23,0.6);
       --max-width: 980px;
-
-      /* header icon color (default = light-on-dark -> white) */
       --header-icon: #ffffff;
-
       --header-top-gap: 12px;
       --header-height: 66px;
     }
 
-    /* Light theme overrides */
-    html[data-theme="light"]{
-      --bg: #ffffff;
-      --surface: rgba(2,6,23,0.02);
-      --page-glass: rgba(255,255,255,0.8);
-      --card: rgba(255,255,255,0.98);
-      --muted: #475569;
-      --text: #071124;
-      --accent: #1d6ef0;
-      --glass-border: rgba(2,6,23,0.06);
-      --shadow-strong: 0 14px 40px rgba(2,6,23,0.08);
-
-      /* in light theme icons should be dark/black */
-      --header-icon: #071124;
-    }
-
-    /* ---------- Global ---------- */
     *{ box-sizing: border-box; }
     html,body{ height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; background:var(--bg); color:var(--text); }
     a{ color:var(--accent); text-decoration:none; }
     button{ font:inherit; }
 
-    /* Page container with glass effect */
     .page {
       max-width:var(--max-width);
       margin:14px auto;
       background: linear-gradient(180deg, var(--page-glass), rgba(255,255,255,0.02));
       border-radius:16px;
-      overflow:visible; /* header sits above page */
       box-shadow: var(--shadow-strong);
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(6px);
-      padding-top: calc(var(--header-height) + 18px); /* allow space for fixed header */
+      padding-top: calc(var(--header-height) + 18px);
       transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
     }
 
-    /* When a modal is open we blur the page */
-    body.modal-open .page {
-      filter: blur(6px);
-    }
+    body.modal-open .page { filter: blur(6px); }
+    body.scrolling .page { transform: translateY(-6px) scale(0.9995); box-shadow: 0 22px 60px rgba(2,6,23,0.12); }
 
-    /* subtle animation while scrolling */
-    body.scrolling .page {
-      transform: translateY(-6px) scale(0.9995);
-      box-shadow: 0 22px 60px rgba(2,6,23,0.12);
-    }
-
-    /* Header — fixed at top of viewport and centered with page */
     header.topbar{
       display:flex;
       align-items:center;
@@ -85,7 +52,7 @@
       top:var(--header-top-gap);
       left:50%;
       transform:translateX(-50%);
-      z-index:10050; /* ensure header is above menu panel */
+      z-index:10050;
       width:calc(100% - 28px);
       max-width:var(--max-width);
       background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
@@ -96,282 +63,96 @@
       transition: padding .18s ease, box-shadow .18s ease, transform .18s ease, background .18s ease;
     }
 
-    /* Header scrolled state: slightly compact */
     header.topbar.scrolled{
       padding:6px 12px;
       box-shadow: 0 20px 50px rgba(2,6,23,0.16);
       transform: translateX(-50%) translateY(-6px);
     }
 
-    .left, .center, .right { display:flex; align-items:center; gap:10px; }
-
-    /* hamburger and theme icon use header icon color variable */
-    header.topbar .hamburger,
-    header.topbar .theme-toggle {
-      color: var(--header-icon);
-    }
-
-    header.topbar .logo {
-      height:56px;
-      width:auto;
-      border-radius:10px;
-      object-fit:cover;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-      transition: height .18s ease, box-shadow .18s ease, border-color .18s ease;
-    }
-    /* shrink logo when header scrolled */
-    header.topbar.scrolled .logo{ height:44px; }
-
-    /* When menu is open, make header solid so close icon is visible in both themes */
     header.topbar.menu-open{
       background: #000 !important;
       border-bottom-color: #000 !important;
       box-shadow: none !important;
-    }
-    /* In light theme make header solid white when menu open */
-    html[data-theme="light"] header.topbar.menu-open{
-      background: #fff !important;
-      border-bottom-color: rgba(2,6,23,0.06) !important;
-      box-shadow: 0 8px 20px rgba(2,6,23,0.06) !important;
+      border-bottom: 1px solid #000 !important;
     }
 
-    /* Hamburger */
+    .left, .center, .right { display:flex; align-items:center; gap:10px; }
+    .center { flex:1; justify-content:center; }
+
     .hamburger{
-      width:46px;height:46px;
-      display:flex;align-items:center;justify-content:center;
+      width:46px; height:46px;
+      display:flex; align-items:center; justify-content:center;
       background:transparent;
       border-radius:10px;
       border:1px solid transparent;
       cursor:pointer;
       transition:transform .18s ease, background .18s ease;
+      color: var(--header-icon);
     }
     .hamburger:active{ transform:scale(.98); }
     .hamburger:focus{ outline:2px solid rgba(47,154,254,0.13); border-color:rgba(47,154,254,0.12); }
 
-    .theme-toggle{
-      width:44px;height:44px;border-radius:10px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
-    }
+    .logo { height:56px; width:auto; border-radius:10px; object-fit:cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); transition: height .18s ease, box-shadow .18s ease; }
+    header.topbar.scrolled .logo{ height:44px; }
 
-    /* Main content - mobile-first single column */
-    .content {
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-
-    /* Center the main headings as requested */
-    .content > section > h3,
-    #coverage > h3,
-    #experience > h3,
-    #workshop-details > h3,
-    #registration > h3 {
-      text-align:center;
-      margin:6px 0 10px 0;
-      color:var(--text);
-    }
-
-    /* Hero / headline (no-wrap title) */
-    .hero {
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-      border-radius:12px;
-      padding:16px;
-      text-align:center;
-      overflow:hidden;
-      position:relative;
-      border:1px solid var(--glass-border);
-    }
-
+    .content { padding:16px; display:flex; flex-direction:column; gap:16px; }
+    .content > section > h3, #coverage > h3, #experience > h3, #workshop-details > h3, #registration > h3 { text-align:center; margin:6px 0 10px 0; color:var(--text); }
+    
+    .hero { background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border-radius:12px; padding:16px; text-align:center; overflow:hidden; position:relative; border:1px solid var(--glass-border); }
     .title-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; justify-content:center; }
-    .title {
-      font-weight:900;
-      color:var(--text);
-      margin:0;
-      white-space:nowrap;          /* default: do not wrap on large screens */
-      font-size: clamp(20px, 7.6vw, 36px); /* responsive size */
-      line-height:1;
-      letter-spacing:0.6px;
-      text-align:center;
-      padding:0 12px;
-    }
-
-    .hosted {
-      font-weight:600;
-      color:var(--muted);
-      font-size:11px;
-      margin:0;
-      text-align:center;
-    }
-
-    /* Images with subtle shadow */
-    .hero-image, .full-image{
-      width:100%;
-      display:block;
-      margin-top:14px;
-      border-radius:10px;
-      box-shadow: 0 12px 30px rgba(2,6,23,0.35);
-      border:1px solid rgba(255,255,255,0.03);
-      object-fit:cover;
-      max-height:360px;
-      transition: transform .25s ease;
-    }
-
-    /* small parallax effect on images while scrolling (JS toggles body.scrolling) */
-    body.scrolling .hero-image,
-    body.scrolling .full-image {
-      transform: translateY(-8px) scale(1.002);
-    }
-
-    .verse{
-      margin-top:12px;
-      font-weight:700;
-      color:var(--text);
-      font-size:15px;
-    }
+    .title { font-weight:900; color:var(--text); margin:0; white-space:nowrap; font-size: clamp(20px, 7.6vw, 36px); line-height:1; letter-spacing:0.6px; text-align:center; padding:0 12px; }
+    .hosted { font-weight:600; color:var(--muted); font-size:11px; margin:0; text-align:center; }
+    
+    .hero-image, .full-image{ width:100%; display:block; margin-top:14px; border-radius:10px; box-shadow: 0 12px 30px rgba(2,6,23,0.35); border:1px solid rgba(255,255,255,0.03); object-fit:cover; max-height:360px; transition: transform .25s ease; }
+    body.scrolling .hero-image, body.scrolling .full-image { transform: translateY(-8px) scale(1.002); }
+    
+    .verse{ margin-top:12px; font-weight:700; color:var(--text); font-size:15px; }
     .verse .ref{ font-weight:600; color:var(--muted); display:block; margin-top:6px; font-size:13px; }
-
-    .lead{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.45;
-      white-space:pre-line;
-    }
-
-    /* small register button under lead */
-    .anchor-register{
-      margin-top:12px;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      justify-content:center;
-      padding:8px 12px;
-      border-radius:9px;
-      background:linear-gradient(180deg,var(--accent), #0b6fe6);
-      color:white;
-      font-weight:700;
-      cursor:pointer;
-      border:0;
-      text-decoration:none;
-      box-shadow: 0 10px 28px rgba(47,154,254,0.18);
-      white-space:nowrap;
-    }
-
-    /* What we're covering: grid of boxes */
-    .cover-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-      margin-top:12px;
-    }
+    .lead{ margin-top:10px; color:var(--muted); font-size:14px; line-height:1.45; white-space:pre-line; }
+    
+    .anchor-register{ margin-top:12px; display:inline-flex; gap:8px; align-items:center; justify-content:center; padding:8px 12px; border-radius:9px; background:linear-gradient(180deg,var(--accent), #0b6fe6); color:white; font-weight:700; cursor:pointer; border:0; text-decoration:none; box-shadow: 0 10px 28px rgba(47,154,254,0.18); white-space:nowrap; }
+    
+    .cover-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px; }
     @media (max-width:640px){ .cover-grid{ grid-template-columns:1fr; } }
-
-    .cover-box{
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      border-radius:12px;
-      padding:12px;
-      border:1px solid var(--glass-border);
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      transition:transform .22s ease, box-shadow .22s ease;
-      cursor:default;
-      min-height:70px;
-    }
+    
+    .cover-box{ background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-radius:12px; padding:12px; border:1px solid var(--glass-border); display:flex; gap:12px; align-items:flex-start; cursor:default; min-height:70px; transition: transform .22s ease, box-shadow .22s ease; }
     .cover-box:hover{ transform:translateY(-6px); box-shadow: 0 14px 30px rgba(2,6,23,0.12); }
-
-    .cover-deco{
-      width:46px;height:46px;border-radius:8px;background:linear-gradient(180deg,var(--accent), #0b6fe6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex:0 0 46px; font-size:16px;
-      box-shadow: 0 8px 20px rgba(2,6,23,0.25);
-    }
+    
+    .cover-deco{ width:46px; height:46px; border-radius:8px; background:linear-gradient(180deg,var(--accent), #0b6fe6); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex:0 0 46px; font-size:16px; box-shadow: 0 8px 20px rgba(2,6,23,0.25); }
     .cover-content h4{ margin:0; font-size:15px; color:var(--text); text-align:left; }
     .cover-content p{ margin:6px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
-
-    /* Workshop details card (more prominent boxed look) */
-    .details-card{
-      margin-top:10px;
-      border-radius:12px;
-      padding:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-      border:1px solid var(--glass-border);
-      box-shadow: 0 8px 26px rgba(2,6,23,0.06);
-    }
+    
+    .details-card{ margin-top:10px; border-radius:12px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.06); }
     .details-card h3{ margin:0 0 8px 0; }
     .details-card p{ margin:0; color:var(--muted); font-size:14px; }
-
-    /* details grid with separate boxes */
-    .details-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-      margin-top:12px;
-    }
-    .detail-item{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid var(--glass-border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      box-shadow: 0 8px 20px rgba(2,6,23,0.04);
-      min-height:72px;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
+    
+    .details-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:12px; }
+    .detail-item{ display:flex; gap:12px; align-items:flex-start; padding:12px; border-radius:12px; border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); box-shadow: 0 8px 20px rgba(2,6,23,0.04); min-height:72px; transition: transform .18s ease, box-shadow .18s ease; }
     .detail-item:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px rgba(2,6,23,0.08); }
-
-    .detail-icon{
-      width:54px;height:54px;border-radius:10px;background:linear-gradient(180deg,var(--accent), #0b6fe6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex:0 0 54px; font-size:18px;
-      box-shadow: 0 8px 22px rgba(2,6,23,0.18);
-    }
+    
+    .detail-icon{ width:54px; height:54px; border-radius:10px; background:linear-gradient(180deg,var(--accent), #0b6fe6); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex:0 0 54px; font-size:18px; box-shadow: 0 8px 22px rgba(2,6,23,0.18); }
     .detail-content{ display:flex; flex-direction:column; gap:4px; }
     .detail-content strong{ font-size:13px; color:var(--muted); }
-    .detail-main{ font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } /* non-wrapping slightly smaller */
+    .detail-main{ font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .detail-sub{ color:var(--muted); font-size:12px; }
-
-    /* Form */
-    .form-card{
-      margin-top:6px;
-      border-radius:12px;
-      padding:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-      border:1px solid var(--glass-border);
-      box-shadow: 0 8px 26px rgba(2,6,23,0.08);
-    }
+    
+    .form-card{ margin-top:6px; border-radius:12px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.08); }
     .form-card h3{ margin:0 0 6px 0; font-size:18px; color:var(--text); }
     .muted-note{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-
+    
     .field{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
     label{ font-size:13px; color:var(--text); font-weight:700; }
-
-    /* Input styles - in light theme make inputs white for contrast */
     input[type="text"], input[type="email"], input[type="tel"], select, textarea {
       padding:10px 12px; border-radius:10px; border:1px solid var(--glass-border);
       background: rgba(255,255,255,0.02); color:var(--text); font-size:14px; outline:none;
     }
     input:focus, textarea:focus { box-shadow: 0 10px 30px rgba(47,154,254,0.12); border-color:var(--accent); }
-
-    html[data-theme="light"] input[type="text"], html[data-theme="light"] input[type="email"], html[data-theme="light"] input[type="tel"], html[data-theme="light"] select, html[data-theme="light"] textarea {
-      background: #ffffff;
-      color: var(--text);
-      border:1px solid rgba(2,6,23,0.06);
-    }
-    html[data-theme="light"] .form-card { background: linear-gradient(180deg,#fff,#fbfdff); }
-
+    
     .role-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:8px; }
     @media (max-width:640px){ .role-grid{ grid-template-columns:1fr; } }
+    
     .option{ position:relative; display:block; cursor:pointer; }
-    .option input{
-      position:absolute;
-      left:8px;
-      top:50%;
-      transform:translateY(-50%);
-      width:18px;
-      height:18px;
-      margin:0;
-      opacity:0; /* visually hidden but accessible */
-      z-index:3;
-    }
+    .option input{ position:absolute; left:8px; top:50%; transform:translateY(-50%); width:18px; height:18px; margin:0; opacity:0; z-index:3; }
     .option-card{ display:flex; gap:12px; align-items:center; padding:10px 14px 10px 56px; border-radius:10px; border:1px solid var(--glass-border); background: transparent; transition: box-shadow .18s ease, border-color .18s ease, background .18s ease, transform .12s ease; position:relative; min-height:56px; }
     .option-card:hover{ transform:translateY(-3px); box-shadow: 0 12px 30px rgba(2,6,23,0.06); }
     .option-card::before{ content: ""; position:absolute; left:18px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:transparent; border:2px solid var(--glass-border); z-index:2; transition: border-color .12s ease, background .12s ease; }
@@ -379,40 +160,108 @@
     .option input:checked + .option-card{ border-color:var(--accent); background: linear-gradient(180deg, rgba(47,154,254,0.05), rgba(47,154,254,0.02)); box-shadow: 0 12px 34px rgba(47,154,254,0.08); }
     .option input:checked + .option-card::before{ border-color:var(--accent); background: rgba(47,154,254,0.04); }
     .option input:checked + .option-card::after{ transform:translateY(-50%) scale(1); }
-
+    
     .opt-text{ display:flex; flex-direction:column; min-width:0; align-items:flex-start; }
     .opt-text strong{ font-size:14px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
     .opt-text small{ color:var(--muted); font-size:12px; margin-top:4px; text-align:left; }
-
+    
     .submit-wrap{ display:flex; justify-content:center; margin-top:12px; }
-    .submit-btn{ background:linear-gradient(180deg,var(--accent), #0b6fe6); color:white; border:0; padding:10px 18px; border-radius:10px; font-weight:800; cursor:pointer; white-space:nowrap; }
-    footer{ margin-top:12px; padding:12px 18px; text-align:center; color:var(--muted); font-size:13px; border-top:1px solid rgba(255,255,255,0.02); }
+    .submit-btn{ background:linear-gradient(180deg,var(--accent), #0b6fe6); color:white; border:0; padding:10px 18px; border-radius:10px; font-weight:800; cursor:pointer; white-space:nowrap; transition: opacity .2s ease; }
+    .submit-btn:disabled{ opacity:0.6; cursor:not-allowed; }
+    
+    .success-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; max-height:90vh; overflow-y:auto; }
+    .success-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+    .success-tick { font-size:48px; color: #10b981; margin-bottom:10px; }
+    .success-modal div{ margin:8px 0; font-size:13px; color:var(--muted); }
+    .success-modal div strong{ color:var(--text); font-weight:700; }
 
-    /* Slide-in menu overlay and panel:
-       - overlay transparent so page not dimmed
-       - panel slides from left under header (header z higher)
-       - header remains visible; set header.menu-open to make header solid while menu open
-    */
+    .certificate-container {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+      border: 2px solid #60a5fa;
+    }
+
+    .cert-header {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .cert-code {
+      background: rgba(255,255,255,0.95);
+      color: #1e3a8a;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: 900;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    .qrcode-container {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 12px 0;
+    }
+
+    .qrcode-container img {
+      width: 160px;
+      height: 160px;
+    }
+
+    .cert-info {
+      color: rgba(255,255,255,0.95);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .download-btn {
+      background: #10b981;
+      color: white;
+      border: 0;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .download-btn:hover {
+      background: #059669;
+    }
+
+    .error-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; }
+    .error-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+    .error-icon { font-size:48px; color: #f87171; margin-bottom:10px; }
+
     .menu-overlay{
       position:fixed;
       left:0; right:0; top:0; bottom:0;
-      z-index:10010; /* below header (header = 10050) but above page */
+      z-index:10010;
       display:none;
-      background: transparent;
+      background: #000;
       pointer-events:auto;
     }
 
     .menu-panel{
       position:fixed; left:0; top:0; bottom:0;
       width:80vw; max-width:420px;
-      background:var(--card);
+      background:#000;
       padding:18px;
       transform:translateX(-110%);
       transition:transform .34s cubic-bezier(.2,.9,.2,1);
       box-shadow: 0 20px 60px rgba(2,6,23,0.6);
       border-right:1px solid var(--glass-border);
       border-radius:0 14px 14px 0;
-      z-index:10015; /* below header, above page */
+      z-index:10015;
     }
     .menu-panel.open{ transform:translateX(0); }
 
@@ -423,53 +272,118 @@
 
     .close-btn-icon{ width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:transparent; border:1px solid transparent; cursor:pointer; color:var(--text); }
 
-    /* Contact / other modals */
-    .modal {
-      position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96);
-      min-width:300px; max-width:90%; z-index:10020; padding:16px; border-radius:12px; background:var(--card);
-      box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; transition:transform .18s ease, opacity .18s ease; opacity:0;
-      border:1px solid var(--glass-border);
-    }
-    .modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
-    .modal h4{ margin:0 0 8px 0; }
-    .modal .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+    .check-status-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:300px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:#000 !important; box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); transition:transform .18s ease, opacity .18s ease; }
+    .check-status-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
 
-    /* Force solid black backgrounds for dark mode for page, menu and modals */
-    html:not([data-theme="light"]) .page,
-    html:not([data-theme="light"]) .menu-panel,
-    html:not([data-theme="light"]) .modal {
-      background: #000 !important;
-      border-color: #000 !important;
-      backdrop-filter: none !important;
+    .modal-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text);
+      transition: transform .2s ease;
     }
 
-    /* Reveal animations */
+    .modal-close-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .status-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .status-input-wrap input {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .status-input-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(47,154,254,0.12);
+    }
+
+    .status-result {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid var(--glass-border);
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .status-result.found {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .status-result.not-found {
+      border-color: #f87171;
+      background: rgba(248, 113, 113, 0.05);
+    }
+
+    .status-detail {
+      margin: 8px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .status-detail strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .paid-badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .pending-badge {
+      display: inline-block;
+      background: #f59e0b;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
     .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; will-change:transform,opacity; }
     .reveal.in-view{ opacity:1; transform:none; }
-
-    /* Responsive tweaks */
-    @media (max-width:980px){
-      .page{ margin:8px; border-radius:12px; }
-      .hero-image, .full-image{ max-height:260px; }
-      .menu-panel{ max-width:92vw; width:92vw; }
-      header.topbar{ left:50%; transform:translateX(-50%); width:calc(100% - 32px); padding:10px; }
-    }
-    @media (max-width:480px){
-      .logo{ height:48px; }
-      header.topbar{ padding:10px; }
-      .title{ font-size: clamp(18px, 9.4vw, 28px); white-space: normal; }
-      .hero-image, .full-image{ max-height:220px; border-radius:10px; }
-    }
+    
+    footer{ margin-top:12px; padding:12px 18px; text-align:center; color:var(--muted); font-size:13px; border-top:1px solid rgba(255,255,255,0.02); }
+    
+    @media (max-width:980px){ .page{ margin:8px; border-radius:12px; } .hero-image, .full-image{ max-height:260px; } header.topbar{ left:50%; transform:translateX(-50%); width:calc(100% - 32px); padding:10px; } }
+    @media (max-width:480px){ .logo{ height:48px; } header.topbar{ padding:10px; } .title{ font-size: clamp(18px, 9.4vw, 28px); white-space: normal; } .hero-image, .full-image{ max-height:220px; border-radius:10px; } .qrcode-container img { width: 120px; height: 120px; } }
   </style>
 </head>
 <body>
-
   <div class="page" role="main" aria-label="Church Media Workshop registration page">
-
     <header class="topbar" role="banner" aria-label="Top navigation">
       <div class="left">
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" title="Open menu">
-          <!-- initial hamburger icon (uses currentColor) -->
           <svg id="hamburgerSvg" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect y="1" width="20" height="2" rx="1" fill="currentColor"/>
             <rect y="6" width="20" height="2" rx="1" fill="currentColor" opacity="0.85"/>
@@ -478,25 +392,13 @@
         </button>
       </div>
 
-      <div class="center" style="flex:1; justify-content:center; position:relative;">
-        <!-- centered top logo -->
+      <div class="center">
         <img class="logo" src="https://raw.githubusercontent.com/ruachmedia/registration/refs/heads/main/logo.png.jfif" alt="Ruach Media logo">
       </div>
 
-      <div class="right">
-        <!-- theme toggle -->
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
-          <!-- uses currentColor -->
-          <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>
-          </svg>
-        </button>
-      </div>
+      <div class="right"></div>
     </header>
-
     <main class="content">
-
-      <!-- HERO -->
       <section id="home" class="hero reveal">
         <div class="title-container">
           <div class="title-wrap">
@@ -504,29 +406,20 @@
             <div class="hosted">Hosted by Ruach Media and Production</div>
           </div>
         </div>
-
-        <img class="hero-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/digital-mixer-recording-studio-with-computer-recording-sounds-music-concept-creativity-show-business.webp"
-             alt="Digital mixer and recording studio" loading="lazy">
-
+        <img class="hero-image reveal" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/digital-mixer-recording-studio-with-computer-recording-sounds-music-concept-creativity-show-business.webp" alt="Digital mixer and recording studio" loading="lazy">
         <div class="verse reveal">"So faith comes from hearing, and hearing through the word of Christ." <span class="ref">Romans 10:17</span></div>
-
-        <p class="lead reveal">
-Are you ready to take your church’s production to the next level?
+        <p class="lead reveal">Are you ready to take your church's production to the next level?
 Join Ruach Media and Production for an intensive, one-day,
 hands-on workshop designed specifically for church media teams
-and volunteers.
-        </p>
-
+and volunteers.</p>
         <div class="reveal">
           <button class="anchor-register" id="scrollRegisterBtn" aria-label="Register now">Register</button>
         </div>
       </section>
 
-      <!-- WHAT WE'RE COVERING -->
       <section id="coverage" class="reveal">
-        <h3>What We’re Covering</h3>
-
-        <div class="cover-grid" id="coverGrid">
+        <h3>What We're Covering</h3>
+        <div class="cover-grid">
           <div class="cover-box reveal">
             <div class="cover-deco">MM</div>
             <div class="cover-content">
@@ -567,7 +460,7 @@ and volunteers.
             </div>
           </div>
 
-           <div class="cover-box reveal">
+          <div class="cover-box reveal">
             <div class="cover-deco">PW</div>
             <div class="cover-content">
               <h4>Plugin Workflow</h4>
@@ -576,26 +469,21 @@ and volunteers.
           </div>
         </div>
 
-        <img class="full-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/Waves.jpg.jpeg" alt="Waves artwork" loading="lazy">
+        <img class="full-image reveal" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/Waves.jpg.jpeg" alt="Waves artwork" loading="lazy">
       </section>
 
-      <!-- THE WORKSHOP EXPERIENCE -->
       <section id="experience" class="reveal">
         <h3>The Workshop Experience</h3>
-        <p class="lead">
-This isn't just a lecture. You will get one full day of hands-on experience with professional equipment. Whether you are a beginner looking to learn the basics or a veteran technician looking to sharpen your skills, there is a seat for you at the console.
-        </p>
+        <p class="lead reveal">This isn't just a lecture. You will get one full day of hands-on experience with professional equipment. Whether you are a beginner looking to learn the basics or a veteran technician looking to sharpen your skills, there is a seat for you at the console.</p>
 
-        <img class="full-image reveal" data-src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/UI24R-No-Talent_original%20(1).jpeg" alt="Soundcraft Ui24R" loading="lazy">
+        <img class="full-image reveal" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/UI24R-No-Talent_original%20(1).jpeg" alt="Soundcraft Ui24R" loading="lazy">
       </section>
 
-      <!-- WORKSHOP DETAILS -->
-      <section id="workshop-details" class="details-card reveal" aria-labelledby="workshopHeading">
-        <h3 id="workshopHeading">Workshop Details</h3>
-
+      <section id="workshop-details" class="details-card reveal">
+        <h3>Workshop Details</h3>
         <div class="details-grid">
           <div class="detail-item">
-            <div class="detail-icon" aria-hidden="true">
+            <div class="detail-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7 11h5v5H7z" fill="rgba(255,255,255,0.95)"></path>
                 <path d="M8 2v2M16 2v2M3 7h18M5 21h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" />
@@ -609,7 +497,7 @@ This isn't just a lecture. You will get one full day of hands-on experience with
           </div>
 
           <div class="detail-item">
-            <div class="detail-icon" aria-hidden="true">
+            <div class="detail-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 7v6l4 2" stroke="rgba(255,255,255,0.95)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
                 <circle cx="12" cy="12" r="8" stroke="rgba(255,255,255,0.95)" stroke-width="1.3"/>
@@ -623,7 +511,7 @@ This isn't just a lecture. You will get one full day of hands-on experience with
           </div>
 
           <div class="detail-item">
-            <div class="detail-icon" aria-hidden="true">
+            <div class="detail-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 11.5a2 2 0 100-4 2 2 0 000 4z" fill="rgba(255,255,255,0.95)"/>
                 <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
@@ -638,21 +526,19 @@ This isn't just a lecture. You will get one full day of hands-on experience with
         </div>
       </section>
 
-      <!-- REGISTRATION FORM -->
-      <section id="registration" class="form-card reveal" aria-labelledby="regHeading">
-        <h3 id="regHeading">Registration Form</h3>
+      <section id="registration" class="form-card reveal">
+        <h3>Registration Form</h3>
         <div class="muted-note">Please fill out your details below. Seats are limited.</div>
 
-        <form id="registration-form" autocomplete="on" onsubmit="submitForm(event)">
-
+        <form id="registration-form" autocomplete="on">
           <div class="field">
             <label for="fullName">Full Name *</label>
             <input id="fullName" name="fullName" type="text" required placeholder="Jane Doe">
           </div>
 
           <div class="field">
-            <label for="phone">Phone Number</label>
-            <input id="phone" name="phone" type="tel" pattern="\+?[0-9\s\-()]{7,}" placeholder="+123 456 7890">
+            <label for="phone">Phone Number *</label>
+            <input id="phone" name="phone" type="tel" required placeholder="+123 456 7890">
           </div>
 
           <div class="field">
@@ -661,20 +547,20 @@ This isn't just a lecture. You will get one full day of hands-on experience with
           </div>
 
           <div class="field">
-            <label for="church">Home Church / Organization</label>
-            <input id="church" name="church" type="text" placeholder="Your church or organization">
+            <label for="church">Home Church / Organization *</label>
+            <input id="church" name="church" type="text" required placeholder="Your church or organization">
           </div>
 
           <div class="field">
-            <label for="location">Location</label>
-            <input id="location" name="location" type="text" placeholder="Town / City or venue (optional)">
+            <label for="location">Location *</label>
+            <input id="location" name="location" type="text" required placeholder="Town / City or venue">
           </div>
 
           <div class="field">
             <label>Skill Level & Interest — What is your primary role? *</label>
             <div class="role-grid" role="radiogroup" aria-required="true">
               <label class="option" aria-label="Audio Engineer">
-                <input type="radio" name="role" value="Audio Engineer" required>
+                <input type="radio" name="role" value="Audio Engineer">
                 <div class="option-card" tabindex="-1">
                   <div class="opt-text"><strong>Audio Engineer</strong><small>Live sound, mixing</small></div>
                 </div>
@@ -695,7 +581,7 @@ This isn't just a lecture. You will get one full day of hands-on experience with
               </label>
 
               <label class="option" aria-label="Church Leadership / Other">
-                <input type="radio" name="role" value="Church Leadership/Other">
+                <input type="radio" name="role" value="Church Leadership/Other" checked>
                 <div class="option-card" tabindex="-1">
                   <div class="opt-text"><strong>Church Leadership / Other</strong><small>Coordination & support</small></div>
                 </div>
@@ -704,7 +590,7 @@ This isn't just a lecture. You will get one full day of hands-on experience with
           </div>
 
           <div class="submit-wrap">
-            <button type="submit" class="submit-btn">Submit Registration</button>
+            <button type="button" class="submit-btn" id="payNowBtn">Pay Now (₹1200)</button>
           </div>
 
           <div id="form-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
@@ -718,18 +604,17 @@ This isn't just a lecture. You will get one full day of hands-on experience with
       <footer class="reveal">
         © Ruach Media and Production — All rights reserved • Questions? <a href="mailto:info@ruachmedia.example">info@ruachmedia.example</a>
       </footer>
-
     </main>
   </div>
 
-  <!-- Slide-in menu overlay -->
+  <!-- Menu Overlay -->
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
     <nav class="menu-panel" role="navigation" aria-label="Main menu" id="menuPanel">
       <div class="menu-header">
         <strong style="font-size:16px; color:var(--text);">Menu</strong>
         <button class="close-btn-icon" id="menuCloseBtn" aria-label="Close menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
@@ -737,98 +622,80 @@ This isn't just a lecture. You will get one full day of hands-on experience with
       <div class="menu-list" role="menu">
         <div class="menu-item" data-target="home" role="menuitem">Home</div>
         <div class="menu-item" data-target="registration" role="menuitem">Register</div>
-        <div class="menu-item" id="contactItem" role="menuitem">Contact Us</div>
-      </div>
-
-      <div style="margin-top:12px; display:flex; gap:8px; flex-direction:column;">
-        <button id="menuPayNow" class="submit-btn" style="width:100%;">Pay Now</button>
-        <button id="menuIpaid" class="submit-btn" style="width:100%; background:#10b981;">I've Paid</button>
+        <div class="menu-item" id="checkStatusItem" role="menuitem">Check Status</div>
       </div>
     </nav>
   </div>
 
-  <!-- Contact modal -->
-  <div class="modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
-    <h4 id="contactTitle">Contact — We'll reply shortly</h4>
-    <p style="margin:6px 0 8px 0; color:var(--muted); font-size:13px;">Enter your email and we'll get back to you.</p>
-
-    <div>
-      <label for="contactEmail" style="font-size:13px;">Email</label>
-      <input id="contactEmail" type="email" placeholder="you@example.com" style="width:100%; margin-top:6px; padding:10px; border-radius:8px; background:transparent; color:var(--text); border:1px solid var(--glass-border);">
+  <!-- Success Modal with Certificate -->
+  <div class="success-modal" id="successModal">
+    <div class="success-tick">✓</div>
+    <h3 style="margin:0 0 8px 0; color:var(--text);">Payment Successful!</h3>
+    <p style="margin:8px 0; color:var(--muted); font-size:13px;">Your registration is complete. Here's your confirmation code:</p>
+    
+    <div class="certificate-container">
+      <div class="cert-header">WORKSHOP PASS</div>
+      <div class="cert-code" id="confirmationCode">Ruach777001</div>
+      
+      <div class="qrcode-container">
+        <img id="qrcodeImg" src="" alt="QR Code">
+      </div>
+      
+      <div class="cert-info">
+        <div>Scan this QR code to verify your registration</div>
+        <div id="certUserName" style="margin-top:8px; font-weight:700; font-size:13px;"></div>
+      </div>
     </div>
 
-    <div class="modal-actions" style="margin-top:12px;">
-      <button id="contactCancel" class="close-btn-icon" aria-label="Cancel">Cancel</button>
-      <button id="contactSubmit" class="submit-btn">Submit</button>
-    </div>
+    <div id="successDetails" style="margin-top:12px;"></div>
 
-    <div id="contactStatus" aria-live="polite" style="margin-top:10px; font-size:13px;"></div>
+    <button class="download-btn" id="downloadCertBtn">📥 Save as Image</button>
+    <button class="submit-btn" id="successDoneBtn" style="margin-top:8px;">Done</button>
   </div>
 
-  <!-- Payment modal -->
-  <div class="modal" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
-    <h4 id="paymentTitle">Workshop Fee — ₹100</h4>
-    <p style="margin:6px 0 8px 0; color:var(--muted); font-size:13px;">
-      Click "Pay Now" to complete your registration payment. After payment completes on Razorpay, return to this tab and click the "I have paid — Confirm" button below to finalise your registration.
-    </p>
-
-    <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
-      <strong style="font-size:18px;">Amount:</strong>
-      <div style="font-weight:800; font-size:18px;">₹100.00</div>
-    </div>
-
-    <div class="modal-actions" style="margin-top:16px;">
-      <button id="paymentCancel" class="close-btn-icon" aria-label="Cancel">Cancel</button>
-      <button id="payLinkBtn" class="submit-btn">Pay Now</button>
-      <button id="paidConfirmBtn" class="submit-btn" style="background:#10b981;">I have paid — Confirm</button>
-    </div>
-
-    <div id="paymentStatus" aria-live="polite" style="margin-top:10px; font-size:13px;"></div>
+  <!-- Error Modal (Email Already Exists) -->
+  <div class="error-modal" id="errorModal">
+    <button class="modal-close-btn" id="errorCloseBtn" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6L18 18"/>
+      </svg>
+    </button>
+    <div class="error-icon">⚠</div>
+    <h3 style="margin:0 0 8px 0; color:var(--text);">Email Already Registered</h3>
+    <p id="errorDetails" style="margin:8px 0; color:var(--muted); font-size:13px;"></p>
+    <button class="submit-btn" id="errorDoneBtn" style="margin-top:16px;">OK</button>
   </div>
 
-  <!-- Menu "I've Paid" modal -->
-  <div class="modal" id="menuPaidModal" role="dialog" aria-modal="true" aria-labelledby="menuPaidTitle">
-    <h4 id="menuPaidTitle">Payment Confirmation</h4>
-    <p style="margin:6px 0 8px 0; color:var(--muted); font-size:13px;">Enter the email you used for registration. We'll send a confirmation mail and record this in our system.</p>
-
-    <div>
-      <label for="menuPaidEmail" style="font-size:13px;">Email</label>
-      <input id="menuPaidEmail" type="email" placeholder="you@example.com" style="width:100%; margin-top:6px; padding:10px; border-radius:8px; background:transparent; color:var(--text); border:1px solid var(--glass-border);">
+  <!-- Check Status Modal -->
+  <div class="check-status-modal" id="checkStatusModal">
+    <button class="modal-close-btn" id="statusCloseBtn" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6L18 18"/>
+      </svg>
+    </button>
+    <h3 style="margin:0 0 8px 0; color:var(--text);">Check Registration Status</h3>
+    <p style="margin:8px 0 12px 0; color:var(--muted); font-size:13px;">Enter your confirmation code to check your registration status:</p>
+    
+    <div class="status-input-wrap">
+      <input type="text" id="statusCodeInput" placeholder="e.g. Ruach777001" maxlength="15">
+      <button class="submit-btn" id="statusCheckBtn" style="margin-top:8px;">Check Status</button>
     </div>
 
-    <div class="modal-actions" style="margin-top:12px;">
-      <button id="menuPaidCancel" class="close-btn-icon" aria-label="Cancel">Cancel</button>
-      <button id="menuPaidSubmit" class="submit-btn">Submit</button>
-    </div>
-
-    <div id="menuPaidStatus" aria-live="polite" style="margin-top:10px; font-size:13px;"></div>
+    <div id="statusResult"></div>
+    <div id="statusLoading" style="text-align:center; margin-top:12px; display:none; color:var(--muted); font-size:13px;">Searching...</div>
   </div>
 
-  <!-- Thank you modal -->
-  <div class="modal" id="thankModal" role="dialog" aria-modal="true" aria-labelledby="thankTitle">
-    <h4 id="thankTitle">Thanks for Registration</h4>
-    <p id="thankMessage" style="margin:6px 0 8px 0; color:var(--muted); font-size:13px;">Thank you — your registration is complete. You will get a confirmation mail by email shortly.</p>
-
-    <div class="modal-actions" style="margin-top:12px;">
-      <button id="thankDone" class="submit-btn">Done</button>
-    </div>
-  </div>
-
-  <!-- Firebase (Realtime DB) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- HTML2Canvas for downloading image -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    /*************************************************************************
-     * Full page script:
-     * - Menu slides in from left under the header.
-     * - No page dimming; overlay is transparent so background content remains visible.
-     * - Header remains visible and becomes solid while menu is open so the close (X) icon is clear.
-     * - Hamburger toggles to a close icon which uses currentColor so it matches dark/light theme.
-     * - Theme toggle updates data-theme ('light' or dark) and icons adapt.
-     * - All original form, Firebase and modal behavior preserved.
-     *************************************************************************/
-
     // Firebase config & init
     const firebaseConfig = {
       apiKey: "AIzaSyCWDx1Sj-S2liB2eI5h6pi4JwCxUokRDpw",
@@ -843,128 +710,27 @@ This isn't just a lecture. You will get one full day of hands-on experience with
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const registrationsRef = db.ref('registrations');
-    const contactsRef = db.ref('contacts');
-    const confirmationsRef = db.ref('payment_confirmations');
 
-    const PAYMENT_LINK = 'https://razorpay.me/@ruachmediaandproduction';
+    // Razorpay Key ID (LIVE)
+    const RAZORPAY_KEY = 'rzp_live_SFPgatX34SQ1qU';
+    const PAYMENT_AMOUNT = 1200 * 100; // Amount in paise
 
-    // Elements
+    // ===== MENU FUNCTIONALITY =====
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const menuOverlay = document.getElementById('menuOverlay');
     const menuPanel = document.getElementById('menuPanel');
     const menuCloseBtn = document.getElementById('menuCloseBtn');
-    const menuPayNow = document.getElementById('menuPayNow');
-    const menuIpaid = document.getElementById('menuIpaid');
-
-    const paymentModal = document.getElementById('paymentModal');
-    const paymentCancel = document.getElementById('paymentCancel');
-    const payLinkBtn = document.getElementById('payLinkBtn');
-    const paidConfirmBtn = document.getElementById('paidConfirmBtn');
-    const paymentStatus = document.getElementById('paymentStatus');
-
-    const contactModal = document.getElementById('contactModal');
-    const contactEmail = document.getElementById('contactEmail');
-    const contactSubmit = document.getElementById('contactSubmit');
-    const contactCancel = document.getElementById('contactCancel');
-    const contactStatus = document.getElementById('contactStatus');
-
-    const menuPaidModal = document.getElementById('menuPaidModal');
-    const menuPaidEmail = document.getElementById('menuPaidEmail');
-    const menuPaidSubmit = document.getElementById('menuPaidSubmit');
-    const menuPaidCancel = document.getElementById('menuPaidCancel');
-    const menuPaidStatus = document.getElementById('menuPaidStatus');
-
-    const thankModal = document.getElementById('thankModal');
-    const thankDone = document.getElementById('thankDone');
-    const thankMessage = document.getElementById('thankMessage');
-
-    // Helper modal functions
-    function openModal(modalEl){
-      modalEl.classList.add('open');
-      modalEl.style.display = 'block';
-      document.body.classList.add('modal-open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal(modalEl){
-      modalEl.classList.remove('open');
-      setTimeout(()=> { modalEl.style.display = 'none'; }, 220);
-      const anyOpen = document.querySelectorAll('.modal.open').length > 0;
-      if(!anyOpen){
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-      }
-    }
-
-    // Payment modal flow
-    let currentRegistrationIdForPayment = null;
-    function openPaymentModal(registrationId, payload){
-      currentRegistrationIdForPayment = registrationId || null;
-      paymentStatus.textContent = '';
-      openModal(paymentModal);
-      setTimeout(()=> payLinkBtn.focus(), 220);
-    }
-    function closePaymentModal(){ closeModal(paymentModal); }
-
-    payLinkBtn.addEventListener('click', ()=>{
-      paymentStatus.style.color = 'var(--muted)';
-      paymentStatus.textContent = 'Opening payment link...';
-      window.open(PAYMENT_LINK, '_blank', 'noopener');
-      paymentStatus.textContent = 'Payment page opened in a new tab. Complete payment there, then come back and click "I have paid — Confirm".';
-    });
-
-    paidConfirmBtn.addEventListener('click', async ()=>{
-      if(!currentRegistrationIdForPayment){
-        paymentStatus.style.color = '#f59e0b';
-        paymentStatus.textContent = 'No registration found to mark paid.';
-        return;
-      }
-      paymentStatus.style.color = 'var(--muted)';
-      paymentStatus.textContent = 'Confirming...';
-      try {
-        await registrationsRef.child(currentRegistrationIdForPayment).update({
-          paid: true,
-          paymentMethod: 'payment-link',
-          amount: 100.00,
-          paidAt: new Date().toISOString()
-        });
-        paymentStatus.style.color = 'limegreen';
-        paymentStatus.textContent = 'Payment marked as complete. Thank you!';
-        closePaymentModal();
-        openModal(thankModal);
-        thankMessage.textContent = 'Thanks for registration — you will get confirmation mail by email.';
-      } catch (err) {
-        console.error(err);
-        paymentStatus.style.color = '#f59e0b';
-        paymentStatus.textContent = 'Could not mark payment. Try again later.';
-      }
-    });
-
-    paymentCancel.addEventListener('click', ()=> closePaymentModal());
-
-    // Hamburger icon state helpers — use currentColor for stroke so it follows theme
-    function setHamburgerToMenu(){
-      hamburgerBtn.setAttribute('aria-label','Open menu');
-      hamburgerBtn.setAttribute('title','Open menu');
-      hamburgerBtn.setAttribute('aria-expanded','false');
-      hamburgerBtn.innerHTML = '<svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect y="1" width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor" opacity="0.85"/><rect y="11" width="20" height="2" rx="1" fill="currentColor" opacity="0.7"/></svg>';
-    }
-    function setHamburgerToClose(){
-      hamburgerBtn.setAttribute('aria-label','Close menu');
-      hamburgerBtn.setAttribute('title','Close menu');
-      hamburgerBtn.setAttribute('aria-expanded','true');
-      hamburgerBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    }
-
-    // Menu open/close (no dimming of background)
     const header = document.querySelector('header.topbar');
+
     function openMenu(){
       menuOverlay.style.display = 'block';
       requestAnimationFrame(()=> menuPanel.classList.add('open'));
       menuOverlay.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
-      header.classList.add('menu-open'); // make header solid so close icon visible
+      header.classList.add('menu-open');
       setHamburgerToClose();
     }
+
     function closeMenu(){
       menuPanel.classList.remove('open');
       menuOverlay.setAttribute('aria-hidden','true');
@@ -974,124 +740,406 @@ This isn't just a lecture. You will get one full day of hands-on experience with
       setHamburgerToMenu();
     }
 
+    function setHamburgerToMenu(){
+      hamburgerBtn.setAttribute('aria-label','Open menu');
+      hamburgerBtn.setAttribute('aria-expanded','false');
+    }
+
+    function setHamburgerToClose(){
+      hamburgerBtn.setAttribute('aria-label','Close menu');
+      hamburgerBtn.setAttribute('aria-expanded','true');
+    }
+
     hamburgerBtn.addEventListener('click', ()=>{
       if(menuPanel.classList.contains('open')) closeMenu(); else openMenu();
     });
+
     menuCloseBtn.addEventListener('click', closeMenu);
 
-    // clicking outside panel (on transparent overlay) closes menu
     menuOverlay.addEventListener('click', (e)=>{
       if(e.target === menuOverlay) closeMenu();
     });
 
-    // menu items
+    // Menu items
     document.querySelectorAll('.menu-item').forEach(item=>{
       item.addEventListener('click', ()=>{
         const target = item.getAttribute('data-target');
-        closeMenu();
-        if(target){
-          const el = document.getElementById(target);
-          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-        } else if(item.id === 'contactItem'){
-          openContactModal();
+        if(item.id === 'checkStatusItem'){
+          closeMenu();
+          openCheckStatusModal();
+        } else {
+          closeMenu();
+          if(target){
+            const el = document.getElementById(target);
+            if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          }
         }
       });
     });
 
-    menuPayNow.addEventListener('click', ()=> { closeMenu(); openPaymentModal(null, null); });
-    menuIpaid.addEventListener('click', ()=> { closeMenu(); menuPaidEmail.value=''; menuPaidStatus.textContent=''; openModal(menuPaidModal); setTimeout(()=> menuPaidEmail.focus(),220); });
-
-    menuPaidCancel.addEventListener('click', ()=> closeModal(menuPaidModal));
-    menuPaidSubmit.addEventListener('click', async ()=>{
-      const email = (menuPaidEmail.value || '').trim();
-      if(!email || !/^\S+@\S+\.\S+$/.test(email)){ menuPaidStatus.style.color='var(--accent)'; menuPaidStatus.textContent='Please enter a valid email.'; return; }
-      menuPaidStatus.style.color='var(--muted)'; menuPaidStatus.textContent='Submitting...';
-      try{
-        await confirmationsRef.push({ email, source:'menu_i_have_paid', submittedAt:new Date().toISOString() });
-        menuPaidStatus.style.color='limegreen'; menuPaidStatus.textContent='Thank you — we recorded your confirmation.';
-        closeModal(menuPaidModal);
-        openModal(thankModal);
-        thankMessage.textContent='Thanks for registration — you will get confirmation mail by email.';
-      }catch(err){
-        console.error(err);
-        menuPaidStatus.style.color='#f59e0b';
-        menuPaidStatus.textContent='Could not submit. Try again later.';
-      }
-    });
-
-    // Contact modal
-    function openContactModal(){ contactEmail.value=''; contactStatus.textContent=''; openModal(contactModal); setTimeout(()=> contactEmail.focus(),220); }
-    function closeContactModal(){ closeModal(contactModal); }
-    contactCancel.addEventListener('click', closeContactModal);
-    contactSubmit.addEventListener('click', ()=>{
-      const email = (contactEmail.value || '').trim();
-      if(!email || !/^\S+@\S+\.\S+$/.test(email)){ contactStatus.style.color='var(--accent)'; contactStatus.textContent='Please enter a valid email.'; return; }
-      contactStatus.style.color='var(--muted)'; contactStatus.textContent='Sending...';
-      contactsRef.push({ email, submittedAt:new Date().toISOString() })
-        .then(()=> { contactStatus.style.color='limegreen'; contactStatus.textContent='Thank you — we will reply you shortly.'; setTimeout(()=> closeContactModal(),1400); })
-        .catch(err=> { console.error(err); contactStatus.style.color='#f59e0b'; contactStatus.textContent='Could not submit. Please try later.'; });
-    });
-
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    function setTheme(name){
-      if(name === 'light'){
-        document.documentElement.setAttribute('data-theme','light');
-        themeIcon.innerHTML = '<path d="M12 4.5V3m0 18v-1.5M4.5 12H3m18 0h-1.5M5.64 5.64 4.22 4.22M19.78 19.78l-1.42-1.42M19.78 4.22 18.36 5.64M4.22 19.78 5.64 18.36" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><circle cx="12" cy="12" r="3" fill="currentColor"/>';
-        localStorage.setItem('theme','light');
-      } else {
-        document.documentElement.removeAttribute('data-theme');
-        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>';
-        localStorage.setItem('theme','dark');
-      }
-      // update hamburger icon to match current state (re-draw using currentColor)
-      if(menuPanel.classList.contains('open')) setHamburgerToClose(); else setHamburgerToMenu();
+    // ===== MODAL HELPERS =====
+    function openModal(modalEl){
+      modalEl.classList.add('open');
+      document.body.classList.add('modal-open');
     }
-    const stored = localStorage.getItem('theme');
-    if(stored) setTheme(stored); else setTheme(prefersLight ? 'light' : 'dark');
-    themeToggle.addEventListener('click', ()=> { const isLight = document.documentElement.getAttribute('data-theme') === 'light'; setTheme(isLight ? 'dark' : 'light'); });
 
-    // Registration submit
-    function submitForm(e){
-      e.preventDefault();
+    function closeModal(modalEl){
+      modalEl.classList.remove('open');
+      const anyOpen = document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open').length > 0;
+      if(!anyOpen){
+        document.body.classList.remove('modal-open');
+      }
+    }
+
+    // ===== CHECK STATUS MODAL =====
+    function openCheckStatusModal(){
+      document.getElementById('statusCodeInput').value = '';
+      document.getElementById('statusResult').innerHTML = '';
+      document.getElementById('statusLoading').style.display = 'none';
+      openModal(document.getElementById('checkStatusModal'));
+      setTimeout(() => document.getElementById('statusCodeInput').focus(), 220);
+    }
+
+    document.getElementById('statusCloseBtn').addEventListener('click', ()=>{
+      closeModal(document.getElementById('checkStatusModal'));
+    });
+
+    document.getElementById('statusCheckBtn').addEventListener('click', async ()=>{
+      const code = document.getElementById('statusCodeInput').value.trim().toUpperCase();
+      const resultEl = document.getElementById('statusResult');
+      const loadingEl = document.getElementById('statusLoading');
+
+      if(!code){
+        resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">Please enter a confirmation code</strong></div>';
+        return;
+      }
+
+      loadingEl.style.display = 'block';
+      resultEl.innerHTML = '';
+
+      // Search in Firebase
+      registrationsRef.orderByChild('confirmationCode').equalTo(code).once('value', (snapshot)=>{
+        loadingEl.style.display = 'none';
+
+        if(snapshot.exists()){
+          const data = Object.values(snapshot.val())[0];
+          const statusClass = data.paid ? 'found' : 'not-found';
+          const statusBadge = data.paid ? '<span class="paid-badge">✓ PAID</span>' : '<span class="pending-badge">⏳ PENDING</span>';
+
+          resultEl.innerHTML = `
+            <div class="status-result ${statusClass}">
+              <div class="status-detail"><strong>Code:</strong> ${data.confirmationCode}</div>
+              <div class="status-detail"><strong>Name:</strong> ${data.fullName}</div>
+              <div class="status-detail"><strong>Email:</strong> ${data.email}</div>
+              <div class="status-detail"><strong>Phone:</strong> ${data.phone}</div>
+              <div class="status-detail"><strong>Church:</strong> ${data.church}</div>
+              <div class="status-detail"><strong>Role:</strong> ${data.role}</div>
+              <div class="status-detail"><strong>Amount:</strong> ₹${data.amount}</div>
+              ${statusBadge}
+            </div>
+          `;
+        } else {
+          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found with this code</strong><div class="status-detail" style="margin-top:8px; color:#f87171;">Please check the code and try again</div></div>';
+        }
+      });
+    });
+
+    // Enter key to check status
+    document.getElementById('statusCodeInput').addEventListener('keypress', (e)=>{
+      if(e.key === 'Enter'){
+        document.getElementById('statusCheckBtn').click();
+      }
+    });
+
+    // ===== REGISTRATION FUNCTIONALITY =====
+    // Function to get next confirmation code
+    async function getNextConfirmationCode() {
+      return new Promise((resolve) => {
+        const counterRef = db.ref('counter');
+        counterRef.transaction((current) => {
+          return (current || 777000) + 1;
+        }).then((result) => {
+          if (result.committed) {
+            resolve('Ruach' + result.snapshot.val());
+          }
+        });
+      });
+    }
+
+    // Scroll Register button
+    document.getElementById('scrollRegisterBtn').addEventListener('click', function(){
+      document.getElementById('registration').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    // Form validation
+    function validateRegistrationForm() {
+      const form = document.getElementById('registration-form');
+      const fullName = form.fullName.value.trim();
+      const phone = form.phone.value.trim();
+      const email = form.email.value.trim();
+      const church = form.church.value.trim();
+      const location = form.location.value.trim();
+      const role = form.querySelector('input[name="role"]:checked') ? form.querySelector('input[name="role"]:checked').value : '';
+      
+      let valid = true;
+      let msg = "";
+      
+      if(!fullName || !phone || !email || !church || !location) {
+        valid = false;
+        msg = "Please fill all required fields.";
+      }
+      else if(!/^\S+@\S+\.\S+$/.test(email)) {
+        valid = false;
+        msg = "Please enter a valid email address.";
+      }
+      else if(!/^\+?[0-9\s\-()]{7,}$/.test(phone)) {
+        valid = false;
+        msg = "Please enter a valid phone number.";
+      }
+      
+      return {valid, msg};
+    }
+
+    // Check if email already exists
+    async function checkEmailExists(email) {
+      return new Promise((resolve) => {
+        registrationsRef.orderByChild('email').equalTo(email).once('value', (snapshot) => {
+          resolve(snapshot.exists());
+        });
+      });
+    }
+
+    // Handle Pay Now
+    document.getElementById('payNowBtn').addEventListener('click', async function() {
       const statusEl = document.getElementById('form-status');
-      statusEl.textContent = '';
-      statusEl.style.color = 'var(--muted)';
-      const fullName = document.getElementById('fullName').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const church = document.getElementById('church').value.trim();
-      const location = document.getElementById('location') ? document.getElementById('location').value.trim() : '';
-      const role = document.querySelector('input[name="role"]:checked') ? document.querySelector('input[name="role"]:checked').value : '';
-      if(!fullName || !email || !role){ statusEl.textContent = 'Please complete required fields.'; statusEl.style.color = '#f87171'; return; }
-      const payload = { fullName, phone, email, church, location, role, submittedAt: new Date().toISOString(), paid: false };
-      const newRef = registrationsRef.push();
-      newRef.set(payload)
-        .then(()=>{
-          const regId = newRef.key;
-          statusEl.textContent = 'Registration submitted — please complete ₹100 fee.';
-          statusEl.style.color = 'limegreen';
-          document.getElementById('registration-form').reset();
-          window.scrollBy({ top: -30, behavior: 'smooth' });
-          openPaymentModal(regId, payload);
+      const payBtn = document.getElementById('payNowBtn');
+      
+      const validation = validateRegistrationForm();
+      if(!validation.valid) {
+        statusEl.textContent = validation.msg;
+        statusEl.style.color = "#f87171";
+        return;
+      }
+
+      const form = document.getElementById('registration-form');
+      const email = form.email.value.trim();
+      
+      payBtn.disabled = true;
+      statusEl.textContent = "Checking registration...";
+      statusEl.style.color = "var(--muted)";
+
+      const emailExists = await checkEmailExists(email);
+      
+      if(emailExists) {
+        payBtn.disabled = false;
+        showErrorModal(email);
+        statusEl.textContent = "";
+        return;
+      }
+
+      statusEl.textContent = "Opening payment gateway...";
+      statusEl.style.color = "var(--muted)";
+      
+      openRazorpayCheckout();
+      payBtn.disabled = false;
+    });
+
+    // Open Razorpay Checkout
+    function openRazorpayCheckout() {
+      const form = document.getElementById('registration-form');
+      const fullName = form.fullName.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
+
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: PAYMENT_AMOUNT,
+        currency: 'INR',
+        name: 'Ruach Media Workshop',
+        description: 'Church Media Workshop Registration',
+        image: 'https://raw.githubusercontent.com/ruachmedia/registration/refs/heads/main/logo.png.jfif',
+        prefill: {
+          name: fullName,
+          email: email,
+          contact: phone
+        },
+        theme: {
+          color: '#2f9afe'
+        },
+        handler: function(response) {
+          saveRegistrationToFirebase(response);
+        },
+        modal: {
+          ondismiss: function() {
+            document.getElementById('form-status').textContent = "Payment cancelled. Please try again.";
+            document.getElementById('form-status').style.color = "#f59e0b";
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    // Save registration to Firebase
+    async function saveRegistrationToFirebase(paymentResponse) {
+      const form = document.getElementById('registration-form');
+      const fullName = form.fullName.value.trim();
+      const phone = form.phone.value.trim();
+      const email = form.email.value.trim();
+      const church = form.church.value.trim();
+      const location = form.location.value.trim();
+      const role = form.querySelector('input[name="role"]:checked').value;
+      
+      const confirmationCode = await getNextConfirmationCode();
+      const registrationAt = new Date().toISOString();
+      const paymentAmount = 1200.00;
+      
+      const payload = {
+        fullName, phone, email, church, location, role,
+        confirmationCode,
+        paid: true,
+        paymentMethod: 'razorpay-checkout',
+        razorpayPaymentId: paymentResponse.razorpay_payment_id,
+        razorpayOrderId: paymentResponse.razorpay_order_id || null,
+        razorpaySignature: paymentResponse.razorpay_signature || null,
+        amount: paymentAmount,
+        transactionAt: new Date().toISOString(),
+        registrationAt
+      };
+      
+      registrationsRef.push(payload)
+        .then(() => {
+          showSuccessModal(payload);
+          form.reset();
+          document.getElementById('form-status').textContent = "";
+          // Reset role to default
+          document.querySelector('input[name="role"][value="Church Leadership/Other"]').checked = true;
         })
-        .catch(err=>{
+        .catch(err => {
           console.error(err);
-          statusEl.textContent = 'Sorry — could not submit. Please try again later.';
-          statusEl.style.color = '#f59e0b';
+          document.getElementById('form-status').textContent = 'Payment successful but error saving registration. Please contact support.';
+          document.getElementById('form-status').style.color = '#f59e0b';
         });
     }
-    window.submitForm = submitForm;
 
-    // reveal observer, lazy images, option clicks
-    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } }); }, { root:null, rootMargin:'0px', threshold:0.12 });
+    // Show success modal
+    function showSuccessModal(payload) {
+      const modal = document.getElementById('successModal');
+      const confirmCodeEl = document.getElementById('confirmationCode');
+      const userNameEl = document.getElementById('certUserName');
+      const detailsEl = document.getElementById('successDetails');
+      
+      confirmCodeEl.textContent = payload.confirmationCode;
+      userNameEl.textContent = payload.fullName;
+      
+      detailsEl.innerHTML = `
+        <div><strong>Name:</strong> ${payload.fullName}</div>
+        <div><strong>Email:</strong> ${payload.email}</div>
+        <div><strong>Phone:</strong> ${payload.phone}</div>
+        <div><strong>Church:</strong> ${payload.church}</div>
+        <div><strong>Location:</strong> ${payload.location}</div>
+        <div><strong>Role:</strong> ${payload.role}</div>
+        <div style="margin-top:10px;"><strong>Amount Paid:</strong> ₹${payload.amount}</div>
+        <div><strong>Transaction ID:</strong> ${payload.razorpayPaymentId}</div>
+        <div style="margin-top:8px; color:limegreen;"><strong>Status:</strong> Payment Confirmed ✓</div>
+      `;
+      
+      // Generate QR code
+      document.getElementById('qrcodeImg').parentElement.innerHTML = '<div id="qrcode"></div>';
+      
+      const qrText = `${payload.confirmationCode}|${payload.fullName}|${payload.email}|${payload.church}|${payload.role}|PAID`;
+      new QRCode(document.getElementById('qrcode'), {
+        text: qrText,
+        width: 160,
+        height: 160,
+        colorDark: '#000',
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      
+      openModal(modal);
+    }
+
+    // Show error modal
+    function showErrorModal(email) {
+      const modal = document.getElementById('errorModal');
+      const details = document.getElementById('errorDetails');
+      
+      details.innerHTML = `This email <strong>${email}</strong> has already been registered for the workshop. Each email can only register once. Please use a different email or contact us if you need to update your registration.`;
+      
+      openModal(modal);
+    }
+
+    // Download certificate
+    document.getElementById('downloadCertBtn').addEventListener('click', async function() {
+      const certificateDiv = document.querySelector('.certificate-container');
+      const btn = document.getElementById('downloadCertBtn');
+      
+      btn.textContent = '⏳ Creating image...';
+      btn.disabled = true;
+
+      try {
+        const canvas = await html2canvas(certificateDiv, {
+          backgroundColor: '#000000',
+          scale: 2
+        });
+        
+        const link = document.createElement('a');
+        const confirmCode = document.getElementById('confirmationCode').textContent;
+        link.href = canvas.toDataURL('image/png');
+        link.download = `${confirmCode}_workshop_pass.png`;
+        link.click();
+        
+        btn.textContent = '✓ Image saved!';
+        setTimeout(() => {
+          btn.textContent = '📥 Save as Image';
+          btn.disabled = false;
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+        btn.textContent = '❌ Error saving image';
+        btn.disabled = false;
+      }
+    });
+
+    // Done buttons
+    document.getElementById('successDoneBtn').addEventListener('click', function(){
+      closeModal(document.getElementById('successModal'));
+    });
+
+    document.getElementById('errorDoneBtn').addEventListener('click', function(){
+      closeModal(document.getElementById('errorModal'));
+    });
+
+    document.getElementById('errorCloseBtn').addEventListener('click', function(){
+      closeModal(document.getElementById('errorModal'));
+    });
+
+    // Role option clicks
+    document.querySelectorAll('.option').forEach(label => {
+      label.addEventListener('click', function(ev) {
+        const radio = label.querySelector('input[type="radio"]');
+        if(radio && !radio.checked){
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+
+    // Reveal observer for animations
+    const io = new IntersectionObserver((entries)=>{ 
+      entries.forEach(e=>{ 
+        if(e.isIntersecting){ 
+          e.target.classList.add('in-view'); 
+          io.unobserve(e.target); 
+        } 
+      }); 
+    }, { root:null, rootMargin:'0px', threshold:0.12 });
+    
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    document.querySelectorAll('img[data-src]').forEach(img=>{ const src = img.getAttribute('data-src'); if(src) img.src = src; });
-    document.querySelectorAll('.option').forEach(label => { label.addEventListener('click', (ev) => { const radio = label.querySelector('input[type="radio"]'); if(radio && !radio.checked){ radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles: true })); } }); });
 
-    // header scroll behavior
+    // Header scroll behavior
     (function headerScrollHandler(){
       const headerEl = document.querySelector('header.topbar');
       let ticking = false;
@@ -1114,17 +1162,10 @@ This isn't just a lecture. You will get one full day of hands-on experience with
     // keyboard: ESC closes modal/menu
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
-        document.querySelectorAll('.modal.open').forEach(m=> closeModal(m));
+        document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open').forEach(m=> closeModal(m));
         if(menuPanel.classList.contains('open')) closeMenu();
       }
     });
-
-    // scroll register button
-    const scrollRegisterBtn = document.getElementById('scrollRegisterBtn');
-    if(scrollRegisterBtn) scrollRegisterBtn.addEventListener('click', ()=>{ const el=document.getElementById('registration'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); });
-
-    // initialize hamburger icon according to theme
-    setHamburgerToMenu();
   </script>
 </body>
 </html>
