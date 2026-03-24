@@ -673,11 +673,32 @@ and volunteers.</p>
                 <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <div class="detail-content">
-              <strong>Location</strong>
-              <div class="detail-main" id="workshopLocation">[Insert Location]</div>
-              <div class="detail-sub">Limited seating — register early</div>
-            </div>
+           <style>
+  .detail-content {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .detail-main {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .detail-sub {
+    overflow-wrap: break-word;
+  }
+</style>
+
+<div class="detail-content">
+  <strong>Location</strong>
+  <div class="detail-main" id="workshopLocation">
+    [Insert Location]
+  </div>
+  <div class="detail-sub">
+    Limited seating — register early
+  </div>
+</div>
           </div>
         </div>
       </section>
