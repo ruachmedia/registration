@@ -673,27 +673,27 @@ and volunteers.</p>
                 <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-           <style>
+<style>
   .detail-content {
     max-width: 100%;
-    overflow: hidden;
   }
 
   .detail-main {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
+    white-space: normal;        /* allow text to go to next line */
+    overflow: visible;          /* no hiding */
+    text-overflow: unset;       /* remove ... */
+    word-break: break-word;     /* break long text if needed */
   }
 
   .detail-sub {
-    overflow-wrap: break-word;
+    white-space: normal;
   }
 </style>
 
 <div class="detail-content">
   <strong>Location</strong>
   <div class="detail-main" id="workshopLocation">
-    [Insert Location]
+    Jesus Blessing Church, Prakash Nagar, KADAPA.
   </div>
   <div class="detail-sub">
     Limited seating — register early
