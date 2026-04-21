@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -558,8 +557,8 @@ and volunteers.</p>
           </div>
           <div class="contact-form">
             <div class="field">
-              <label for="contactEmailForm">Email Address *</label>
-              <input id="contactEmailForm" name="contactEmail" type="email" required placeholder="your@email.com">
+              <label for="contactPhoneForm">Phone Number *</label>
+              <input id="contactPhoneForm" name="contactPhone" type="tel" required placeholder="Enter your phone number">
             </div>
             <div class="field">
               <label for="contactMessage">Your Message *</label>
@@ -912,20 +911,20 @@ and volunteers.</p>
 
     });
 
-    // ===== CONTACT FORM =====
+    // ===== CONTACT FORM - UPDATED TO USE PHONE INSTEAD OF EMAIL =====
     document.getElementById('contactSubmitBtn').addEventListener('click', async function(){
-      const contactEmail = document.getElementById('contactEmailForm').value.trim();
+      const contactPhone = document.getElementById('contactPhoneForm').value.trim();
       const contactMessage = document.getElementById('contactMessage').value.trim();
       const statusEl = document.getElementById('contact-status');
 
-      if(!contactEmail || !contactMessage){
+      if(!contactPhone || !contactMessage){
         statusEl.textContent = 'Please fill all required fields.';
         statusEl.style.color = '#f87171';
         return;
       }
 
-      if(!/^\S+@\S+\.\S+$/.test(contactEmail)){
-        statusEl.textContent = 'Please enter a valid email address.';
+      if(!/^\+?[\d\s\-\(\)]{7,}$/.test(contactPhone)){
+        statusEl.textContent = 'Please enter a valid phone number.';
         statusEl.style.color = '#f87171';
         return;
       }
@@ -935,11 +934,11 @@ and volunteers.</p>
 
       try {
         await contactsRef.push({
-          email: contactEmail,
+          phone: contactPhone,
           message: contactMessage,
           submittedAt: new Date().toISOString()
         });
-        document.getElementById('contactEmailForm').value = '';
+        document.getElementById('contactPhoneForm').value = '';
         document.getElementById('contactMessage').value = '';
         statusEl.textContent = '';
         openModal(document.getElementById('contactSuccessModal'));
