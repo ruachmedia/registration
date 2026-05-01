@@ -27,6 +27,30 @@
     a{ color:var(--accent); text-decoration:none; }
     button{ font: inherit; }
 
+    /* ── PAYMENT LOADING OVERLAY ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #paymentLoadingOverlay {
+      position: fixed; left: 0; top: 0; right: 0; bottom: 0;
+      z-index: 20000;
+      background: rgba(0,0,0,0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+      backdrop-filter: blur(4px);
+    }
+    #paymentLoadingOverlay.active { display: flex; }
+    .pay-spinner {
+      width: 52px; height: 52px;
+      border: 4px solid rgba(47,154,254,0.18);
+      border-top-color: #2f9afe;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    .pay-loading-title { color: #eef6ff; font-weight: 800; font-size: 17px; }
+    .pay-loading-sub   { color: #9aa6b2; font-size: 13px; }
+
     .page {
       max-width:var(--max-width);
       margin:14px auto;
@@ -99,35 +123,35 @@
 
     .content { padding:16px; display:flex; flex-direction:column; gap:16px; }
     .content > section > h3, #coverage > h3, #experience > h3, #workshop-details > h3, #registration > h3, #contact > h3 { text-align:center; margin:6px 0 10px 0; color:var(--text); }
-
+    
     .hero { background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border-radius:12px; padding:16px; text-align:center; overflow:hidden; position:relative; border:1px solid var(--glass-border); }
     .title-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; justify-content:center; }
     .title { font-weight:900; color:var(--text); margin:0; white-space:nowrap; font-size: clamp(20px, 7.6vw, 36px); line-height:1; letter-spacing:0.6px; text-align:center; padding:0 12px; }
     .hosted { font-weight:600; color:var(--muted); font-size:11px; margin:0; text-align:center; }
-
+    
     .hero-image, .full-image{ width:100%; display:block; margin-top:14px; border-radius:10px; box-shadow: 0 12px 30px rgba(2,6,23,0.35); border:1px solid rgba(255,255,255,0.03); object-fit:cover; max-height:360px; transition: transform .25s ease; }
     body.scrolling .hero-image, body.scrolling .full-image { transform: translateY(-8px) scale(1.002); }
-
+    
     .verse{ margin-top:12px; font-weight:700; color:var(--text); font-size:15px; }
     .verse .ref{ font-weight:600; color:var(--muted); display:block; margin-top:6px; font-size:13px; }
     .lead{ margin-top:10px; color:var(--muted); font-size:14px; line-height:1.45; white-space:pre-line; }
-
+    
     .button-group{ margin-top:16px; display:flex; flex-direction:column; gap:8px; align-items:center; }
     .anchor-register, .anchor-check-status{ display:inline-flex; gap:8px; align-items:center; justify-content:center; padding:10px 20px; border-radius:9px; color:white; font-weight:700; cursor:pointer; border:0; text-decoration:none; box-shadow: 0 10px 28px rgba(47,154,254,0.18); white-space:nowrap; width:100%; max-width:280px; }
     .anchor-register{ background:linear-gradient(180deg,var(--accent), #0b6fe6); }
     .anchor-check-status{ background:linear-gradient(180deg, #10b981, #059669); }
     .anchor-check-status:hover{ opacity:0.9; }
-
+    
     .cover-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px; }
     @media (max-width:640px){ .cover-grid{ grid-template-columns:1fr; } }
-
+    
     .cover-box{ background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-radius:12px; padding:12px; border:1px solid var(--glass-border); display:flex; gap:12px; align-items:flex-start; cursor:default; min-height:70px; transition: transform .22s ease, box-shadow .22s ease; }
     .cover-box:hover{ transform:translateY(-6px); box-shadow: 0 14px 30px rgba(2,6,23,0.12); }
-
+    
     .cover-deco{ width:46px; height:46px; border-radius:8px; background:linear-gradient(180deg,var(--accent), #0b6fe6); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex:0 0 46px; font-size:16px; box-shadow: 0 8px 20px rgba(2,6,23,0.25); }
     .cover-content h4{ margin:0; font-size:15px; color:var(--text); text-align:left; }
     .cover-content p{ margin:6px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
-
+    
     .contact-card{ margin-top:12px; border-radius:12px; padding:16px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.06); }
     .contact-info{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:20px; }
     .contact-item{ display:flex; flex-direction:column; gap:6px; }
@@ -135,63 +159,130 @@
     .contact-item p{ margin:0; color:var(--muted); font-size:14px; }
     .contact-form{ display:flex; flex-direction:column; gap:12px; }
 
+    /* Phone input with country prefix */
+    .phone-input-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .country-prefix {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .phone-input-wrap input[type="tel"] { flex: 1; }
+
     .details-card{ margin-top:10px; border-radius:12px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.06); }
     .details-card h3{ margin:0 0 8px 0; }
     .details-card p{ margin:0; color:var(--muted); font-size:14px; }
-
+    
     .details-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:12px; }
     .detail-item{ display:flex; gap:12px; align-items:flex-start; padding:12px; border-radius:12px; border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); box-shadow: 0 8px 20px rgba(2,6,23,0.04); min-height:72px; transition: transform .18s ease, box-shadow .18s ease; }
     .detail-item:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px rgba(2,6,23,0.08); }
-
+    
     .detail-icon{ width:54px; height:54px; border-radius:10px; background:linear-gradient(180deg,var(--accent), #0b6fe6); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex:0 0 54px; font-size:18px; box-shadow: 0 8px 22px rgba(2,6,23,0.18); }
-    .detail-content{ display:flex; flex-direction:column; gap:4px; }
+    .detail-content{ display:flex; flex-direction:column; gap:4px; max-width:100%; }
     .detail-content strong{ font-size:13px; color:var(--muted); }
-    .detail-main{ font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .detail-sub{ color:var(--muted); font-size:12px; }
-
+    .detail-main{ font-weight:700; color:var(--text); font-size:13px; white-space:normal; overflow:visible; text-overflow:unset; word-break:break-word; }
+    .detail-sub{ color:var(--muted); font-size:12px; white-space:normal; }
+    
     .form-card{ margin-top:6px; border-radius:12px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid var(--glass-border); box-shadow: 0 8px 26px rgba(2,6,23,0.08); }
     .form-card h3{ margin:0 0 6px 0; font-size:18px; color:var(--text); }
     .muted-note{ color:var(--muted); font-size:13px; margin-bottom:8px; }
 
-    /* ===== COMING SOON STYLES ===== */
-    .coming-soon-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 36px 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(47,154,254,0.18);
-      background: linear-gradient(180deg, rgba(47,154,254,0.04), rgba(47,154,254,0.01));
-      text-align: center;
+    /* ── STORE COMING SOON ── */
+    .store-card {
       margin-top: 6px;
+      border-radius: 16px;
+      padding: 32px 20px;
+      background: linear-gradient(135deg, rgba(47,154,254,0.06) 0%, rgba(11,111,230,0.04) 100%);
+      border: 1px solid rgba(47,154,254,0.15);
+      box-shadow: 0 8px 30px rgba(47,154,254,0.07);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .coming-soon-icon {
-      font-size: 52px;
-      line-height: 1;
+    .store-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(47,154,254,0.08) 0%, transparent 70%);
+      pointer-events: none;
     }
-    .coming-soon-title {
-      font-size: 20px;
+    .store-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #2f9afe, #0b6fe6);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .store-emoji { font-size: 52px; margin-bottom: 10px; display: block; }
+    .store-title {
+      font-size: 26px;
       font-weight: 900;
       color: var(--text);
-      margin: 0;
-      letter-spacing: 0.4px;
+      margin: 0 0 8px 0;
+      letter-spacing: 0.5px;
     }
-    .coming-soon-msg {
+    .store-subtitle {
       color: var(--muted);
       font-size: 14px;
       line-height: 1.6;
-      margin: 0;
-      max-width: 340px;
+      max-width: 420px;
+      margin: 0 auto 20px auto;
     }
-    .coming-soon-divider {
-      width: 48px;
-      height: 3px;
-      border-radius: 99px;
-      background: linear-gradient(90deg, var(--accent), #0b6fe6);
-      border: none;
-      margin: 0;
+    .store-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .store-feature-tag {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .store-coming-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      background: rgba(47,154,254,0.12);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 15px;
+      border: 1px solid rgba(47,154,254,0.25);
+      cursor: not-allowed;
+      letter-spacing: 0.3px;
+      transition: all 0.2s ease;
+    }
+    .store-coming-btn:hover {
+      background: rgba(47,154,254,0.18);
+      border-color: rgba(47,154,254,0.4);
+    }
+    .store-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
     .field{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
@@ -201,10 +292,10 @@
       background: rgba(255,255,255,0.02); color:var(--text); font-size:14px; outline:none;
     }
     input:focus, textarea:focus { box-shadow: 0 10px 30px rgba(47,154,254,0.12); border-color:var(--accent); }
-
+    
     .role-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:8px; }
     @media (max-width:640px){ .role-grid{ grid-template-columns:1fr; } }
-
+    
     .option{ position:relative; display:block; cursor:pointer; }
     .option input{ position:absolute; left:8px; top:50%; transform:translateY(-50%); width:18px; height:18px; margin:0; opacity:0; z-index:3; }
     .option-card{ display:flex; gap:12px; align-items:center; padding:10px 14px 10px 56px; border-radius:10px; border:1px solid var(--glass-border); background: transparent; transition: box-shadow .18s ease, border-color .18s ease, background .18s ease, transform .12s ease; position:relative; min-height:56px; }
@@ -214,15 +305,15 @@
     .option input:checked + .option-card{ border-color:var(--accent); background: linear-gradient(180deg, rgba(47,154,254,0.05), rgba(47,154,254,0.02)); box-shadow: 0 12px 34px rgba(47,154,254,0.08); }
     .option input:checked + .option-card::before{ border-color:var(--accent); background: rgba(47,154,254,0.04); }
     .option input:checked + .option-card::after{ transform:translateY(-50%) scale(1); }
-
+    
     .opt-text{ display:flex; flex-direction:column; min-width:0; align-items:flex-start; }
     .opt-text strong{ font-size:14px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
     .opt-text small{ color:var(--muted); font-size:12px; margin-top:4px; text-align:left; }
-
+    
     .submit-wrap{ display:flex; justify-content:center; margin-top:12px; }
     .submit-btn{ background:linear-gradient(180deg,var(--accent), #0b6fe6); color:white; border:0; padding:10px 18px; border-radius:10px; font-weight:800; cursor:pointer; white-space:nowrap; transition: opacity .2s ease; }
     .submit-btn:disabled{ opacity:0.6; cursor:not-allowed; }
-
+    
     .success-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; max-height:90vh; overflow-y:auto; }
     .success-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
     .success-tick { font-size:48px; color: #10b981; margin-bottom:10px; }
@@ -238,79 +329,29 @@
       border: 2px solid #60a5fa;
       position: relative;
     }
-    .cert-header {
-      color: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    .cert-code {
-      background: rgba(255,255,255,0.95);
-      color: #1e3a8a;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 20px;
-      font-weight: 900;
-      margin: 10px 0;
-      font-family: 'Courier New', monospace;
-    }
-    .qrcode-container {
-      background: white;
-      padding: 12px;
-      border-radius: 8px;
-      display: inline-block;
-      margin: 12px 0;
-    }
+    .cert-header { color: #fff; font-size: 18px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+    .cert-code { background: rgba(255,255,255,0.95); color: #1e3a8a; padding: 12px; border-radius: 8px; font-size: 20px; font-weight: 900; margin: 10px 0; font-family: 'Courier New', monospace; }
+    .qrcode-container { background: white; padding: 12px; border-radius: 8px; display: inline-block; margin: 12px 0; }
     .qrcode-container img { width: 160px; height: 160px; }
     .cert-info { color: rgba(255,255,255,0.95); font-size: 12px; margin-top: 10px; }
 
     .download-btn, .share-btn {
-      background: #10b981;
-      color: white;
-      border: 0;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 12px;
-      margin-right: 8px;
-      display: inline-block;
-      transition: all 0.2s ease;
+      background: #10b981; color: white; border: 0; padding: 10px 20px; border-radius: 8px;
+      font-weight: 800; cursor: pointer; margin-top: 12px; margin-right: 8px;
+      display: inline-block; transition: all 0.2s ease;
     }
     .share-btn { background: linear-gradient(180deg, #2f9afe, #0b6fe6); }
     .download-btn:hover { background: #059669; }
     .share-btn:hover { opacity: 0.9; }
 
     .share-options {
-      display: none;
-      position: absolute;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.95);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 12px;
-      gap: 8px;
-      z-index: 10025;
-      flex-direction: column;
-      min-width: 200px;
+      display: none; position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.95); border: 1px solid var(--glass-border);
+      border-radius: 10px; padding: 12px; gap: 8px; z-index: 10025;
+      flex-direction: column; min-width: 200px;
     }
     .share-options.show { display: flex; }
-    .share-option {
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--glass-border);
-      color: var(--text);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
+    .share-option { padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text); border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s ease; text-align: center; }
     .share-option:hover { background: var(--accent); border-color: var(--accent); }
 
     .error-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:280px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:var(--card); box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); text-align:center; transition:transform .18s ease, opacity .18s ease; }
@@ -322,73 +363,28 @@
     .contact-modal h3{ margin:0 0 8px 0; color:var(--text); text-align:center; }
     .contact-modal p{ margin:0 0 12px 0; color:var(--muted); font-size:13px; text-align:center; }
 
-    .menu-overlay{
-      position:fixed;
-      left:0; right:0; top:0; bottom:0;
-      z-index:10010;
-      display:none;
-      background: #000;
-      pointer-events:auto;
-    }
-    .menu-panel{
-      position:fixed; left:0; top:0; bottom:0;
-      width:80vw; max-width:420px;
-      background:#000;
-      padding:18px;
-      transform:translateX(-110%);
-      transition:transform .34s cubic-bezier(.2,.9,.2,1);
-      box-shadow: 0 20px 60px rgba(2,6,23,0.6);
-      border-right:1px solid var(--glass-border);
-      border-radius:0 14px 14px 0;
-      z-index:10015;
-    }
+    .menu-overlay{ position:fixed; left:0; right:0; top:0; bottom:0; z-index:10010; display:none; background: #000; pointer-events:auto; }
+    .menu-panel{ position:fixed; left:0; top:0; bottom:0; width:80vw; max-width:420px; background:#000; padding:18px; transform:translateX(-110%); transition:transform .34s cubic-bezier(.2,.9,.2,1); box-shadow: 0 20px 60px rgba(2,6,23,0.6); border-right:1px solid var(--glass-border); border-radius:0 14px 14px 0; z-index:10015; }
     .menu-panel.open{ transform:translateX(0); }
     .menu-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:18px; }
     .menu-list{ display:flex; flex-direction:column; gap:12px; }
-    .menu-item{ padding:12px 10px; border-radius:10px; font-weight:800; color:var(--text); cursor:pointer; background:transparent; border:1px solid transparent; }
+    .menu-item{ padding:12px 10px; border-radius:10px; font-weight:800; color:var(--text); cursor:pointer; background:transparent; border:1px solid transparent; transition: background .18s ease, transform .18s ease; }
     .menu-item:hover{ background:rgba(255,255,255,0.02); transform:translateX(4px); }
+    .menu-item.menu-store-item { color: var(--accent); border: 1px solid rgba(47,154,254,0.18); background: rgba(47,154,254,0.04); }
+    .menu-item.menu-store-item:hover { background: rgba(47,154,254,0.09); }
     .close-btn-icon{ width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:transparent; border:1px solid transparent; cursor:pointer; color:var(--text); }
 
     .check-status-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96); min-width:300px; max-width:94%; z-index:10020; padding:16px; border-radius:12px; background:#000 !important; box-shadow: 0 30px 80px rgba(2,6,23,0.6); display:none; opacity:0; border:1px solid var(--glass-border); transition:transform .18s ease, opacity .18s ease; max-height:90vh; overflow-y:auto; }
     .check-status-modal.open{ display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
 
-    .modal-close-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: 1px solid var(--glass-border);
-      border-radius: 8px;
-      cursor: pointer;
-      color: var(--text);
-      transition: transform .2s ease;
-    }
+    .modal-close-btn { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; color: var(--text); transition: transform .2s ease; }
     .modal-close-btn:hover { transform: scale(1.1); }
 
     .status-input-wrap { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-    .status-input-wrap input {
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text);
-      font-size: 14px;
-    }
+    .status-input-wrap input { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); color: var(--text); font-size: 14px; }
     .status-input-wrap input:focus { outline: none; border-color: var(--accent); box-shadow: 0 10px 30px rgba(47,154,254,0.12); }
 
-    .status-result {
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-      border-radius: 12px;
-      padding: 12px;
-      border: 1px solid var(--glass-border);
-      margin-top: 12px;
-      text-align: left;
-    }
+    .status-result { background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border-radius: 12px; padding: 12px; border: 1px solid var(--glass-border); margin-top: 12px; text-align: left; }
     .status-result.found { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
     .status-result.not-found { border-color: #f87171; background: rgba(248, 113, 113, 0.05); }
     .status-detail { margin: 8px 0; font-size: 13px; color: var(--muted); }
@@ -399,7 +395,6 @@
 
     .customer-accounts-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
     @media (min-width: 640px) { .customer-accounts-container { grid-template-columns: repeat(2, 1fr); } }
-
     .account-card { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; transition: all 0.2s ease; }
     .account-card:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(47,154,254,0.15); }
     .account-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
@@ -414,14 +409,21 @@
 
     .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; will-change:transform,opacity; }
     .reveal.in-view{ opacity:1; transform:none; }
-
+    
     footer{ margin-top:12px; padding:12px 18px; text-align:center; color:var(--muted); font-size:13px; border-top:1px solid rgba(255,255,255,0.02); }
-
+    
     @media (max-width:980px){ .page{ margin:8px; border-radius:12px; } .hero-image, .full-image{ max-height:260px; } header.topbar{ left:50%; transform:translateX(-50%); width:calc(100% - 32px); padding:10px; } }
     @media (max-width:480px){ .logo{ height:48px; } header.topbar{ padding:10px; } .title{ font-size: clamp(18px, 9.4vw, 28px); white-space: normal; } .hero-image, .full-image{ max-height:220px; border-radius:10px; } .qrcode-container img { width: 120px; height: 120px; } .download-btn, .share-btn { padding: 8px 12px; font-size: 11px; margin-right: 4px; } }
   </style>
 </head>
 <body>
+
+  <!-- ── PAYMENT LOADING OVERLAY ── -->
+  <div id="paymentLoadingOverlay">
+    <div class="pay-spinner"></div>
+    <div class="pay-loading-title">Processing Payment…</div>
+    <div class="pay-loading-sub">Please do not close or go back</div>
+  </div>
 
   <div class="page" role="main" aria-label="Church Media Workshop registration page">
     <header class="topbar" role="banner" aria-label="Top navigation">
@@ -462,7 +464,7 @@ and volunteers.</p>
         </div>
       </section>
 
-      <!-- WHAT WE'RE COVERING -->
+      <!-- COVERAGE -->
       <section id="coverage" class="reveal">
         <h3>What We're Covering</h3>
         <div class="cover-grid">
@@ -512,33 +514,146 @@ and volunteers.</p>
         <img class="full-image reveal" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/Waves.jpg.jpeg" alt="Waves artwork" loading="lazy">
       </section>
 
-      <!-- WORKSHOP EXPERIENCE -->
+      <!-- EXPERIENCE -->
       <section id="experience" class="reveal">
         <h3>The Workshop Experience</h3>
         <p class="lead reveal">This isn't just a lecture. You will get one full day of hands-on experience with professional equipment. Whether you are a beginner looking to learn the basics or a veteran technician looking to sharpen your skills, there is a seat for you at the console.</p>
         <img class="full-image reveal" src="https://raw.githubusercontent.com/Davidbantu/Soundtestapp/refs/heads/main/UI24R-No-Talent_original%20(1).jpeg" alt="Soundcraft Ui24R" loading="lazy">
       </section>
 
-      <!-- ===== WORKSHOP DETAILS — COMING SOON ===== -->
+      <!-- WORKSHOP DETAILS -->
       <section id="workshop-details" class="details-card reveal">
         <h3>Workshop Details</h3>
-        <div class="coming-soon-box">
-          <div class="coming-soon-icon">📅</div>
-          <hr class="coming-soon-divider">
-          <p class="coming-soon-title">Details Coming Soon.</p>
-          <p class="coming-soon-msg">The date, time, and venue for the next workshop will be announced shortly. Stay tuned for updates!</p>
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 11h5v5H7z" fill="rgba(255,255,255,0.95)"></path>
+                <path d="M8 2v2M16 2v2M3 7h18M5 21h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Date</strong>
+              <div class="detail-main" id="workshopDate">22 APRIL 2026</div>
+              <div class="detail-sub">Full day, hands-on sessions</div>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 7v6l4 2" stroke="rgba(255,255,255,0.95)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="8" stroke="rgba(255,255,255,0.95)" stroke-width="1.3"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Check‑in</strong>
+              <div class="detail-main"><span id="workshopCheckin">8:45 AM</span> — Session starts <span id="workshopStart">9:00 AM</span></div>
+              <div class="detail-sub">Please arrive early to register</div>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 11.5a2 2 0 100-4 2 2 0 000 4z" fill="rgba(255,255,255,0.95)"/>
+                <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" stroke="rgba(255,255,255,0.95)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="detail-content">
+              <strong>Location</strong>
+              <div class="detail-main" id="workshopLocation">Jesus Blessing Church, Prakash Nagar, KADAPA.</div>
+              <div class="detail-sub">Limited seating — register early</div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- ===== REGISTRATION — COMING SOON ===== -->
+      <!-- ── STORE — COMING SOON ── -->
+      <section id="store" class="store-card reveal">
+        <div class="store-badge">🛒 Coming Soon</div>
+        <span class="store-emoji">🏪</span>
+        <h2 class="store-title">Ruach Media Store</h2>
+        <p class="store-subtitle">
+          We're building an exciting store with exclusive media resources for church teams.
+          Presets, plugins, templates, training bundles and more — all in one place.
+        </p>
+        <div class="store-features">
+          <span class="store-feature-tag">🎛️ Audio Presets</span>
+          <span class="store-feature-tag">🎨 Design Templates</span>
+          <span class="store-feature-tag">🎥 Video Overlays</span>
+          <span class="store-feature-tag">📦 Training Bundles</span>
+          <span class="store-feature-tag">🔌 Plugin Packs</span>
+        </div>
+        <button class="store-coming-btn" disabled aria-disabled="true">
+          🚧 Store Opening Soon
+        </button>
+        <p class="store-note">Stay tuned — we'll announce the launch date soon!</p>
+      </section>
+
+      <!-- REGISTRATION -->
       <section id="registration" class="form-card reveal">
         <h3>Registration Form</h3>
-        <div class="coming-soon-box">
-          <div class="coming-soon-icon">🔔</div>
-          <hr class="coming-soon-divider">
-          <p class="coming-soon-title">Registration is closed.</p>
-          <p class="coming-soon-msg">Please wait for the next workshop update. Thank you.</p>
-        </div>
+        <div class="muted-note">Please fill out your details below. Seats are limited.</div>
+
+        <form id="registration-form" autocomplete="on">
+          <div class="field">
+            <label for="fullName">Full Name *</label>
+            <input id="fullName" name="fullName" type="text" required placeholder="Jane Doe">
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number *</label>
+            <input id="phone" name="phone" type="tel" required placeholder="+123 456 7890">
+          </div>
+          <div class="field">
+            <label for="email">Email Address *</label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="church">Home Church / Organization *</label>
+            <input id="church" name="church" type="text" required placeholder="Your church or organization">
+          </div>
+          <div class="field">
+            <label for="location">Location *</label>
+            <input id="location" name="location" type="text" required placeholder="Town / City or venue">
+          </div>
+          <div class="field">
+            <label>Skill Level & Interest — What is your primary role? *</label>
+            <div class="role-grid" role="radiogroup" aria-required="true">
+              <label class="option" aria-label="Audio Engineer">
+                <input type="radio" name="role" value="Audio Engineer">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Audio Engineer</strong><small>Live sound, mixing</small></div>
+                </div>
+              </label>
+              <label class="option" aria-label="Visual / Camera Operator">
+                <input type="radio" name="role" value="Visual/Camera Operator">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Visual / Camera Operator</strong><small>Cameras, framing</small></div>
+                </div>
+              </label>
+              <label class="option" aria-label="Media / Graphics">
+                <input type="radio" name="role" value="Media/Graphics">
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Media / Graphics</strong><small>Posters, overlays</small></div>
+                </div>
+              </label>
+              <label class="option" aria-label="Church Leadership / Other">
+                <input type="radio" name="role" value="Church Leadership/Other" checked>
+                <div class="option-card" tabindex="-1">
+                  <div class="opt-text"><strong>Church Leadership / Other</strong><small>Coordination & support</small></div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="submit-wrap">
+            <button type="button" class="submit-btn" id="payNowBtn">Pay Now (₹1200)</button>
+          </div>
+
+          <div id="form-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
+          <div style="margin-top:8px; font-size:13px; color:var(--muted); text-align:center;">
+            By submitting you agree to be contacted with workshop updates.
+          </div>
+        </form>
       </section>
 
       <!-- CONTACT -->
@@ -555,18 +670,26 @@ and volunteers.</p>
               <p><a id="contactEmail" href="mailto:info@ruachmedia.example">info@ruachmedia.example</a></p>
             </div>
           </div>
+
           <div class="contact-form">
+            <!-- Phone number with +91 country code -->
             <div class="field">
-              <label for="contactPhoneForm">Phone Number *</label>
-              <input id="contactPhoneForm" name="contactPhone" type="tel" required placeholder="Enter your phone number">
+              <label for="contactPhoneInput">Phone Number *</label>
+              <div class="phone-input-wrap">
+                <div class="country-prefix">🇮🇳 +91</div>
+                <input id="contactPhoneInput" name="contactPhone" type="tel" placeholder="98765 43210" maxlength="15">
+              </div>
             </div>
+
             <div class="field">
               <label for="contactMessage">Your Message *</label>
               <textarea id="contactMessage" name="contactMessage" required placeholder="Tell us your question or concern..." style="min-height:120px; resize:vertical;"></textarea>
             </div>
+
             <div class="submit-wrap">
               <button type="button" class="submit-btn" id="contactSubmitBtn">Send Message</button>
             </div>
+
             <div id="contact-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
           </div>
         </div>
@@ -575,7 +698,6 @@ and volunteers.</p>
       <footer class="reveal">
         © Ruach Media and Production — All rights reserved • Questions? <a href="mailto:ruachmedia.in@gmail.com">ruachmedia.in@gmail.com</a>
       </footer>
-
     </main>
   </div>
 
@@ -591,10 +713,11 @@ and volunteers.</p>
         </button>
       </div>
       <div class="menu-list" role="menu">
-        <div class="menu-item" data-target="home" role="menuitem">Home</div>
-        <div class="menu-item" data-target="registration" role="menuitem">Registration Form</div>
-        <div class="menu-item" data-target="workshop-details" role="menuitem">Workshop Details</div>
-        <div class="menu-item" data-target="contact" role="menuitem">Contact Us</div>
+        <div class="menu-item" data-target="home" role="menuitem">🏠 Home</div>
+        <div class="menu-item" data-target="registration" role="menuitem">📝 Registration Form</div>
+        <div class="menu-item" data-target="workshop-details" role="menuitem">📋 Workshop Details</div>
+        <div class="menu-item menu-store-item" data-target="store" role="menuitem">🛒 Open Store <span style="font-size:10px; font-weight:600; opacity:0.7;">(Coming Soon)</span></div>
+        <div class="menu-item" data-target="contact" role="menuitem">📞 Contact Us</div>
       </div>
     </nav>
   </div>
@@ -672,15 +795,15 @@ and volunteers.</p>
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <!-- Razorpay -->
+  <!-- Razorpay Checkout Script -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <!-- QR Code Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <!-- HTML2Canvas -->
+  <!-- HTML2Canvas for downloading image -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // ===== FIREBASE =====
+    // ── Firebase config & init ──
     const firebaseConfig = {
       apiKey: "AIzaSyCWDx1Sj-S2liB2eI5h6pi4JwCxUokRDpw",
       authDomain: "newreservation-f307f.firebaseapp.com",
@@ -694,153 +817,302 @@ and volunteers.</p>
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const registrationsRef = db.ref('registrations');
-    const contactsRef = db.ref('contacts');
-    const workshopRef = db.ref('workshopDetails');
+    const contactsRef       = db.ref('contacts');
+    const workshopRef       = db.ref('workshopDetails');
 
-    const RAZORPAY_KEY = 'rzp_live_SFPgatX34SQ1qU';
-    const PAYMENT_AMOUNT = 1200 * 100;
+    const RAZORPAY_KEY    = 'rzp_live_SFPgatX34SQ1qU';
+    const PAYMENT_AMOUNT  = 1200 * 100; // paise
+
     let currentCertificateData = null;
 
-    // Load contact details only from Firebase (date/time/location hidden)
+    // ── Payment loading overlay helpers ──
+    const payLoadingOverlay = document.getElementById('paymentLoadingOverlay');
+    function showPayLoading()  { payLoadingOverlay.classList.add('active');    document.body.style.overflow = 'hidden'; }
+    function hidePayLoading()  { payLoadingOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+
+    // ── Load workshop details ──
     workshopRef.on('value', snapshot => {
-      if(snapshot.exists()) {
-        const data = snapshot.val();
-        if(data.contactPhone) {
-          document.getElementById('contactPhone').href = 'tel:' + data.contactPhone;
-          document.getElementById('contactPhone').textContent = data.contactPhone;
-        }
-        if(data.contactEmail) {
-          document.getElementById('contactEmail').href = 'mailto:' + data.contactEmail;
-          document.getElementById('contactEmail').textContent = data.contactEmail;
-        }
+      if (snapshot.exists()) {
+        const d = snapshot.val();
+        document.getElementById('workshopDate').textContent     = d.workshopDate     || '[Insert Date]';
+        document.getElementById('workshopCheckin').textContent  = d.checkinTime      || '8:45 AM';
+        document.getElementById('workshopStart').textContent    = d.sessionStartTime || '9:00 AM';
+        document.getElementById('workshopLocation').textContent = d.location         || '[Insert Location]';
+        document.getElementById('contactPhone').href        = 'tel:'    + (d.contactPhone || '+919876543210');
+        document.getElementById('contactPhone').textContent = d.contactPhone || '+91 98765 43210';
+        document.getElementById('contactEmail').href        = 'mailto:' + (d.contactEmail || 'info@ruachmedia.example');
+        document.getElementById('contactEmail').textContent = d.contactEmail || 'info@ruachmedia.example';
       }
     });
 
-    // ===== MENU =====
+    // ── MENU ──
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const menuPanel = document.getElementById('menuPanel');
+    const menuOverlay  = document.getElementById('menuOverlay');
+    const menuPanel    = document.getElementById('menuPanel');
     const menuCloseBtn = document.getElementById('menuCloseBtn');
-    const header = document.querySelector('header.topbar');
+    const header       = document.querySelector('header.topbar');
 
-    function openMenu(){
+    function openMenu() {
       menuOverlay.style.display = 'block';
-      requestAnimationFrame(()=> menuPanel.classList.add('open'));
-      menuOverlay.setAttribute('aria-hidden','false');
+      requestAnimationFrame(() => menuPanel.classList.add('open'));
+      menuOverlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
       header.classList.add('menu-open');
-      hamburgerBtn.setAttribute('aria-label','Close menu');
-      hamburgerBtn.setAttribute('aria-expanded','true');
+      hamburgerBtn.setAttribute('aria-label',    'Close menu');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
     }
-
-    function closeMenu(){
+    function closeMenu() {
       menuPanel.classList.remove('open');
-      menuOverlay.setAttribute('aria-hidden','true');
+      menuOverlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      setTimeout(()=> menuOverlay.style.display = 'none', 380);
+      setTimeout(() => menuOverlay.style.display = 'none', 380);
       header.classList.remove('menu-open');
-      hamburgerBtn.setAttribute('aria-label','Open menu');
-      hamburgerBtn.setAttribute('aria-expanded','false');
+      hamburgerBtn.setAttribute('aria-label',    'Open menu');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
     }
 
-    hamburgerBtn.addEventListener('click', ()=>{
-      if(menuPanel.classList.contains('open')) closeMenu(); else openMenu();
+    hamburgerBtn.addEventListener('click', () => {
+      menuPanel.classList.contains('open') ? closeMenu() : openMenu();
     });
     menuCloseBtn.addEventListener('click', closeMenu);
-    menuOverlay.addEventListener('click', (e)=>{ if(e.target === menuOverlay) closeMenu(); });
+    menuOverlay.addEventListener('click', e => { if (e.target === menuOverlay) closeMenu(); });
 
-    document.querySelectorAll('.menu-item').forEach(item=>{
-      item.addEventListener('click', ()=>{
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', () => {
         const target = item.getAttribute('data-target');
         closeMenu();
-        if(target){
+        if (target) {
           const el = document.getElementById(target);
-          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
     });
 
-    // ===== MODAL HELPERS =====
-    function openModal(modalEl){
+    // ── MODAL HELPERS ──
+    function openModal(modalEl) {
       modalEl.classList.add('open');
       document.body.classList.add('modal-open');
     }
-    function closeModal(modalEl){
+    function closeModal(modalEl) {
       modalEl.classList.remove('open');
       const anyOpen = document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open, .contact-modal.open').length > 0;
-      if(!anyOpen) document.body.classList.remove('modal-open');
+      if (!anyOpen) document.body.classList.remove('modal-open');
     }
 
-    // ===== SCROLL BUTTONS =====
-    document.getElementById('scrollRegisterBtn').addEventListener('click', function(){
-      document.getElementById('registration').scrollIntoView({behavior:'smooth', block:'start'});
+    // ── SCROLL BUTTONS ──
+    document.getElementById('scrollRegisterBtn').addEventListener('click', () => {
+      document.getElementById('registration').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    document.getElementById('scrollCheckStatusBtn').addEventListener('click', function(){
+    document.getElementById('scrollCheckStatusBtn').addEventListener('click', () => {
       openCheckStatusModal();
     });
 
-    // ===== CHECK STATUS MODAL =====
-    function openCheckStatusModal(){
-      document.getElementById('statusInput').value = '';
-      document.getElementById('statusResult').innerHTML = '';
-      document.getElementById('statusLoading').style.display = 'none';
-      openModal(document.getElementById('checkStatusModal'));
-      setTimeout(() => document.getElementById('statusInput').focus(), 220);
+  // ── CHECK STATUS MODAL ──
+function openCheckStatusModal() {
+  document.getElementById('statusInput').value   = '';
+  document.getElementById('statusResult').innerHTML = '';
+  document.getElementById('statusLoading').style.display = 'none';
+  openModal(document.getElementById('checkStatusModal'));
+  setTimeout(() => document.getElementById('statusInput').focus(), 220);
+}
+
+document.getElementById('statusCloseBtn').addEventListener('click', () => {
+  closeModal(document.getElementById('checkStatusModal'));
+});
+
+document.getElementById('statusCheckBtn').addEventListener('click', () => {
+  const input     = document.getElementById('statusInput').value.trim(); // Don't uppercase yet
+  const resultEl  = document.getElementById('statusResult');
+  const loadingEl = document.getElementById('statusLoading');
+
+  console.log('🔍 Search Input:', input);
+
+  if (!input) {
+    resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ Please enter a phone number or confirmation code</strong></div>';
+    return;
+  }
+
+  loadingEl.style.display = 'block';
+  resultEl.innerHTML = '';
+
+  registrationsRef.once('value', snapshot => {
+    loadingEl.style.display = 'none';
+
+    console.log('📊 Database Connected:', snapshot.exists());
+
+    if (!snapshot.exists()) {
+      resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registrations in database</strong></div>';
+      return;
     }
 
-    document.getElementById('statusCloseBtn').addEventListener('click', ()=>{
-      closeModal(document.getElementById('checkStatusModal'));
-    });
-
-    document.getElementById('statusCheckBtn').addEventListener('click', async ()=>{
-      const input = document.getElementById('statusInput').value.trim().toUpperCase();
-      const resultEl = document.getElementById('statusResult');
-      const loadingEl = document.getElementById('statusLoading');
-
-      if(!input){
-        resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">Please enter a phone number or confirmation code</strong></div>';
-        return;
-      }
-
-      loadingEl.style.display = 'block';
-      resultEl.innerHTML = '';
-
-      registrationsRef.once('value', (snapshot)=>{
-        loadingEl.style.display = 'none';
-        if(!snapshot.exists()){
-          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found</strong></div>';
-          return;
-        }
-
-        const allRegistrations = [];
-        snapshot.forEach(child => { allRegistrations.push({ id: child.key, ...child.val() }); });
-
-        let foundRecords = allRegistrations.filter(r => r.confirmationCode && r.confirmationCode.toUpperCase() === input);
-
-        if(foundRecords.length === 0 && input.replace(/[^0-9]/g, '').length >= 7) {
-          const cleanInput = input.replace(/[^0-9]/g, '');
-          foundRecords = allRegistrations.filter(r => {
-            const cleanPhone = (r.phone || '').replace(/[^0-9]/g, '');
-            return cleanPhone.includes(cleanInput) || cleanInput.includes(cleanPhone);
-          });
-        }
-
-        if(foundRecords.length === 0){
-          resultEl.innerHTML = '<div class="status-result not-found"><strong style="color:#f87171;">❌ No registration found</strong><div class="status-detail" style="margin-top:8px; color:#f87171;">Please check and try again</div></div>';
-          return;
-        }
-
-        if(foundRecords.length === 1) displaySingleAccountWithQR(foundRecords[0], resultEl);
-        else displayMultipleAccountsWithQR(foundRecords, resultEl);
+    const all = [];
+    snapshot.forEach(child => {
+      all.push({ 
+        id: child.key, 
+        ...child.val() 
       });
     });
 
-    function displaySingleAccountWithQR(record, resultEl) {
-      const statusBadge = record.paymentStatus === 'Paid'
-        ? '<span class="paid-badge">✓ PAID</span>'
-        : '<span class="pending-badge">⏳ PENDING</span>';
-      const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+    console.log('📋 Total Registrations:', all.length);
+    console.log('📋 All Data:', all);
 
+    let found = [];
+
+    // ===== METHOD 1: Try Confirmation Code Match =====
+    const inputUpper = input.toUpperCase().trim();
+    found = all.filter(r => {
+      const code = (r.confirmationCode || '').toUpperCase().trim();
+      console.log('Comparing code:', code, '===', inputUpper, '→', code === inputUpper);
+      return code === inputUpper;
+    });
+
+    console.log('✅ Found by Code:', found.length);
+
+    // ===== METHOD 2: Try Phone Number Match =====
+    if (found.length === 0) {
+      const clean = input.replace(/[^0-9]/g, '');
+      console.log('🔢 Cleaned Input:', clean, '(length:', clean.length, ')');
+
+      if (clean.length >= 7) {
+        found = all.filter(r => {
+          const cp = (r.phone || '').replace(/[^0-9]/g, '');
+          
+          // Match if:
+          // 1. Phone contains the input digits
+          // 2. Input contains the phone digits
+          // 3. Last 10 digits match
+          const match = cp.includes(clean) || clean.includes(cp) || cp.endsWith(clean);
+          
+          console.log('Comparing phone:', cp, 'vs clean:', clean, '→', match);
+          
+          return match;
+        });
+      } else {
+        console.log('❌ Input too short for phone search (need 7+ digits)');
+      }
+    }
+
+    console.log('🎯 Final Found Records:', found.length);
+
+    if (found.length === 0) {
+      resultEl.innerHTML = `<div class="status-result not-found">
+        <strong style="color:#f87171;">❌ No Registration Found</strong>
+        <div class="status-detail" style="margin-top:8px; color:#f87171;">
+          <small>No match for: <strong>"${input}"</strong></small>
+          <br><small style="margin-top:4px; display:block;">Try your phone number or confirmation code</small>
+        </div>
+      </div>`;
+      return;
+    }
+
+    if (found.length === 1) {
+      displaySingleAccountWithQR(found[0], resultEl);
+    } else {
+      displayMultipleAccountsWithQR(found, resultEl);
+    }
+  });
+});
+
+// ── DISPLAY SINGLE ACCOUNT WITH QR ──
+function displaySingleAccountWithQR(record, resultEl) {
+  console.log('📌 Single Account:', record);
+
+  const statusBadge = record.paymentStatus === 'Paid' 
+    ? '<span class="paid-badge">✓ PAID</span>' 
+    : '<span class="pending-badge">⏳ PENDING</span>';
+  
+  const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+
+  resultEl.innerHTML = `
+    <div class="status-result found">
+      <div class="status-detail"><strong>📋 Code:</strong> ${record.confirmationCode}</div>
+      <div class="status-detail"><strong>👤 Name:</strong> ${record.fullName}</div>
+      <div class="status-detail"><strong>📧 Email:</strong> ${record.email}</div>
+      <div class="status-detail"><strong>📱 Phone:</strong> ${record.phone}</div>
+      <div class="status-detail"><strong>⛪ Church:</strong> ${record.church}</div>
+      <div class="status-detail"><strong>📍 Location:</strong> ${record.location}</div>
+      <div class="status-detail"><strong>🎯 Role:</strong> ${record.role}</div>
+      <div class="status-detail"><strong>💰 Amount:</strong> ₹${record.amount || 1200}</div>
+      ${statusBadge}
+      <div style="background:white;padding:8px;border-radius:6px;margin-top:12px;text-align:center;" id="statusQrCode"></div>
+      <button class="submit-btn" id="doneBtn" style="margin-top:12px;width:100%;">Done</button>
+    </div>`;
+
+  new QRCode(document.getElementById('statusQrCode'), {
+    text: verificationUrl,
+    width: 150,
+    height: 150,
+    colorDark: '#000',
+    colorLight: '#fff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  document.getElementById('doneBtn').addEventListener('click', () => {
+    closeModal(document.getElementById('checkStatusModal'));
+  });
+}
+
+// ── DISPLAY MULTIPLE ACCOUNTS WITH QR ──
+function displayMultipleAccountsWithQR(records, resultEl) {
+  console.log('📌 Multiple Accounts:', records.length);
+
+  let html = `<div class="status-result found">
+    <div class="status-detail" style="margin-bottom:12px;">
+      <strong style="color:#10b981;">✓ Found ${records.length} account(s):</strong>
+    </div>
+    <div class="customer-accounts-container">`;
+
+  records.forEach((record, index) => {
+    const isPaid = record.paymentStatus === 'Paid';
+    const statusBadge = isPaid ? '✓ PAID' : '⏳ PENDING';
+    const statusClass = isPaid ? 'account-status' : 'account-status pending';
+
+    html += `
+      <div class="account-card">
+        <div class="account-header">
+          <div class="account-code">${record.confirmationCode}</div>
+          <span class="${statusClass}">${statusBadge}</span>
+        </div>
+        <div class="account-info">
+          <div class="account-info-row"><strong>👤 Name:</strong> ${record.fullName}</div>
+          <div class="account-info-row"><strong>📧 Email:</strong> ${record.email}</div>
+          <div class="account-info-row"><strong>📱 Phone:</strong> ${record.phone}</div>
+          <div class="account-info-row"><strong>⛪ Church:</strong> ${record.church}</div>
+          <div class="account-info-row"><strong>📍 Location:</strong> ${record.location}</div>
+          <div class="account-info-row"><strong>🎯 Role:</strong> ${record.role}</div>
+          <div class="account-info-row"><strong>💰 Amount:</strong> ₹${record.amount || 1200}</div>
+        </div>
+        <div class="account-qr" id="statusQr_${index}"></div>
+      </div>`;
+  });
+
+  html += `</div><button class="submit-btn" id="doneBtn" style="margin-top:12px;width:100%;">Done</button></div>`;
+  resultEl.innerHTML = html;
+
+  records.forEach((record, index) => {
+    const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
+    new QRCode(document.getElementById(`statusQr_${index}`), {
+      text: verificationUrl,
+      width: 120,
+      height: 120,
+      colorDark: '#000',
+      colorLight: '#fff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  });
+
+  document.getElementById('doneBtn').addEventListener('click', () => {
+    closeModal(document.getElementById('checkStatusModal'));
+  });
+}
+
+document.getElementById('statusInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('statusCheckBtn').click();
+});
+
+    function displaySingleAccountWithQR(record, resultEl) {
+      const statusBadge      = record.paymentStatus === 'Paid' ? '<span class="paid-badge">✓ PAID</span>' : '<span class="pending-badge">⏳ PENDING</span>';
+      const verificationUrl  = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
       resultEl.innerHTML = `
         <div class="status-result found">
           <div class="status-detail"><strong>Code:</strong> ${record.confirmationCode}</div>
@@ -855,30 +1127,21 @@ and volunteers.</p>
           <div style="background:white;padding:8px;border-radius:6px;margin-top:12px;text-align:center;" id="statusQrCode"></div>
           <button class="submit-btn" id="doneBtn" style="margin-top:12px;width:100%;">Done</button>
         </div>`;
-
-      new QRCode(document.getElementById('statusQrCode'), {
-        text: verificationUrl, width: 150, height: 150,
-        colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H
-      });
+      new QRCode(document.getElementById('statusQrCode'), { text: verificationUrl, width: 150, height: 150, colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H });
       document.getElementById('doneBtn').addEventListener('click', () => closeModal(document.getElementById('checkStatusModal')));
     }
 
     function displayMultipleAccountsWithQR(records, resultEl) {
-      let html = `<div class="status-result found">
-        <div class="status-detail" style="margin-bottom:12px;">
-          <strong style="color:#10b981;">✓ Found ${records.length} account(s) with this phone number:</strong>
-        </div>
-        <div class="customer-accounts-container">`;
-
+      let html = `<div class="status-result found"><div class="status-detail" style="margin-bottom:12px;"><strong style="color:#10b981;">✓ Found ${records.length} account(s) with this phone number:</strong></div><div class="customer-accounts-container">`;
       records.forEach((record, index) => {
-        const isPaid = record.paymentStatus === 'Paid';
-        const statusBadge = isPaid ? '✓ PAID' : '⏳ PENDING';
-        const statusClass = isPaid ? 'account-status' : 'account-status pending';
+        const isPaid       = record.paymentStatus === 'Paid';
+        const statusText   = isPaid ? '✓ PAID' : '⏳ PENDING';
+        const statusClass  = isPaid ? 'account-status' : 'account-status pending';
         html += `
           <div class="account-card">
             <div class="account-header">
               <div class="account-code">${record.confirmationCode}</div>
-              <span class="${statusClass}">${statusBadge}</span>
+              <span class="${statusClass}">${statusText}</span>
             </div>
             <div class="account-info">
               <div class="account-info-row"><strong>Name:</strong> ${record.fullName}</div>
@@ -892,187 +1155,289 @@ and volunteers.</p>
             <div class="account-qr" id="statusQr_${index}"></div>
           </div>`;
       });
-
       html += `</div><button class="submit-btn" id="doneBtn" style="margin-top:12px;width:100%;">Done</button></div>`;
       resultEl.innerHTML = html;
-
       records.forEach((record, index) => {
         const verificationUrl = `${window.location.origin}/verify.html?code=${record.confirmationCode}`;
-        new QRCode(document.getElementById(`statusQr_${index}`), {
-          text: verificationUrl, width: 120, height: 120,
-          colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H
-        });
+        new QRCode(document.getElementById(`statusQr_${index}`), { text: verificationUrl, width: 120, height: 120, colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H });
       });
       document.getElementById('doneBtn').addEventListener('click', () => closeModal(document.getElementById('checkStatusModal')));
     }
 
-    document.getElementById('statusInput').addEventListener('keypress', (e)=>{
-      if(e.key === 'Enter') document.getElementById('statusCheckBtn').click();
-
+    document.getElementById('statusInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') document.getElementById('statusCheckBtn').click();
     });
 
-    // ===== CONTACT FORM - UPDATED TO USE PHONE INSTEAD OF EMAIL =====
-    document.getElementById('contactSubmitBtn').addEventListener('click', async function(){
-      const contactPhone = document.getElementById('contactPhoneForm').value.trim();
-      const contactMessage = document.getElementById('contactMessage').value.trim();
-      const statusEl = document.getElementById('contact-status');
+    // ── CONTACT FORM (phone number instead of email) ──
+    document.getElementById('contactSubmitBtn').addEventListener('click', async function () {
+      const phoneRaw  = document.getElementById('contactPhoneInput').value.trim();
+      const message   = document.getElementById('contactMessage').value.trim();
+      const statusEl  = document.getElementById('contact-status');
 
-      if(!contactPhone || !contactMessage){
-        statusEl.textContent = 'Please fill all required fields.';
+      if (!phoneRaw || !message) {
+        statusEl.textContent = 'Please fill in all required fields.';
         statusEl.style.color = '#f87171';
         return;
       }
-
-      if(!/^\+?[\d\s\-\(\)]{7,}$/.test(contactPhone)){
+      // Basic phone validation: at least 7 digits
+      if (!/^[0-9\s\-()]{7,15}$/.test(phoneRaw)) {
         statusEl.textContent = 'Please enter a valid phone number.';
         statusEl.style.color = '#f87171';
         return;
       }
 
-      statusEl.textContent = 'Sending your message...';
+      const fullPhone = '+91' + phoneRaw.replace(/\s/g, '');
+      statusEl.textContent = 'Sending your message…';
       statusEl.style.color = 'var(--muted)';
 
       try {
         await contactsRef.push({
-          phone: contactPhone,
-          message: contactMessage,
+          phone:       fullPhone,
+          message:     message,
           submittedAt: new Date().toISOString()
         });
-        document.getElementById('contactPhoneForm').value = '';
-        document.getElementById('contactMessage').value = '';
+        document.getElementById('contactPhoneInput').value = '';
+        document.getElementById('contactMessage').value    = '';
         statusEl.textContent = '';
         openModal(document.getElementById('contactSuccessModal'));
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         statusEl.textContent = 'Could not send message. Please try again later.';
         statusEl.style.color = '#f59e0b';
       }
     });
 
-    document.getElementById('contactModalCloseBtn').addEventListener('click', ()=>{
-      closeModal(document.getElementById('contactSuccessModal'));
-    });
-    document.getElementById('contactModalDoneBtn').addEventListener('click', ()=>{
-      closeModal(document.getElementById('contactSuccessModal'));
-    });
+    document.getElementById('contactModalCloseBtn').addEventListener('click', () => closeModal(document.getElementById('contactSuccessModal')));
+    document.getElementById('contactModalDoneBtn').addEventListener('click',  () => closeModal(document.getElementById('contactSuccessModal')));
 
-    // ===== SHARE BUTTON =====
-    document.getElementById('shareBtn').addEventListener('click', function(e) {
-      e.stopPropagation();
-      document.getElementById('shareOptions').classList.toggle('show');
-    });
-
-    document.addEventListener('click', function(e) {
-      const shareOptions = document.getElementById('shareOptions');
-      const shareBtn = document.getElementById('shareBtn');
-      if(e.target !== shareBtn && !shareOptions.contains(e.target)) {
-        shareOptions.classList.remove('show');
-      }
-    });
-
-    function shareToWhatsApp() {
-      if(!currentCertificateData) return;
-      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
-      const text = `🎉 I just registered for the Church Media Workshop!\n\n📋 Confirmation Code: ${currentCertificateData.confirmationCode}\n👤 Name: ${currentCertificateData.fullName}\n📍 Location: ${currentCertificateData.location}\n💰 Amount: ₹${currentCertificateData.amount}\n\n👉 Scan or click: ${verificationUrl}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    function shareToFacebook() {
-      if(!currentCertificateData) return;
-      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(verificationUrl)}`, '_blank');
-    }
-
-    function shareToInstagram() {
-      if(!currentCertificateData) return;
-      const certificateDiv = document.getElementById('certificateDiv');
-      html2canvas(certificateDiv, { backgroundColor: '#000000', scale: 2 }).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = `${currentCertificateData.confirmationCode}_workshop_pass.png`;
-        link.click();
-        alert('📱 Image downloaded! Now:\n\n1. Open Instagram\n2. Create a new post\n3. Upload the image\n4. Add caption: "🎉 I just completed the Church Media Workshop! #RuachMedia #MediaWorkshop"');
+    // ── REGISTRATION ──
+    async function getNextConfirmationCode() {
+      return new Promise(resolve => {
+        db.ref('counter').transaction(current => (current || 777000) + 1).then(result => {
+          if (result.committed) resolve('Ruach' + result.snapshot.val());
+        });
       });
     }
 
+    function validateRegistrationForm() {
+      const form     = document.getElementById('registration-form');
+      const fullName = form.fullName.value.trim();
+      const phone    = form.phone.value.trim();
+      const email    = form.email.value.trim();
+      const church   = form.church.value.trim();
+      const location = form.location.value.trim();
+
+      if (!fullName || !phone || !email || !church || !location) return { valid: false, msg: 'Please fill all required fields.' };
+      if (!/^\S+@\S+\.\S+$/.test(email))                         return { valid: false, msg: 'Please enter a valid email address.' };
+      if (!/^\+?[0-9\s\-()]{7,}$/.test(phone))                   return { valid: false, msg: 'Please enter a valid phone number.' };
+      return { valid: true, msg: '' };
+    }
+
+    document.getElementById('payNowBtn').addEventListener('click', function () {
+      const statusEl = document.getElementById('form-status');
+      const v = validateRegistrationForm();
+      if (!v.valid) {
+        statusEl.textContent = v.msg;
+        statusEl.style.color = '#f87171';
+        return;
+      }
+      statusEl.textContent = '';
+      openRazorpayCheckout();
+    });
+
+    function openRazorpayCheckout() {
+      const form     = document.getElementById('registration-form');
+      const fullName = form.fullName.value.trim();
+      const email    = form.email.value.trim();
+      const phone    = form.phone.value.trim();
+
+      // Show loading overlay as soon as we open the payment gateway
+      showPayLoading();
+
+      const options = {
+        key:         RAZORPAY_KEY,
+        amount:      PAYMENT_AMOUNT,
+        currency:    'INR',
+        name:        'Ruach Media Workshop',
+        description: 'Church Media Workshop Registration',
+        image:       'https://raw.githubusercontent.com/ruachmedia/registration/refs/heads/main/logo.png.jfif',
+        prefill:     { name: fullName, email: email, contact: phone },
+        theme:       { color: '#2f9afe' },
+        handler: function (response) {
+          // Keep loading until Firebase save + modal show
+          saveRegistrationToFirebase(response);
+        },
+        modal: {
+          ondismiss: function () {
+            // User closed / went back from Razorpay
+            hidePayLoading();
+            const statusEl = document.getElementById('form-status');
+            statusEl.textContent = 'Payment cancelled. Please try again.';
+            statusEl.style.color = '#f59e0b';
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    async function saveRegistrationToFirebase(paymentResponse) {
+      const form             = document.getElementById('registration-form');
+      const fullName         = form.fullName.value.trim();
+      const phone            = form.phone.value.trim();
+      const email            = form.email.value.trim();
+      const church           = form.church.value.trim();
+      const location         = form.location.value.trim();
+      const role             = form.querySelector('input[name="role"]:checked').value;
+      const confirmationCode = await getNextConfirmationCode();
+
+      const payload = {
+        fullName, phone, email, church, location, role,
+        confirmationCode,
+        paymentStatus:     'Paid',
+        paymentMethod:     'razorpay-checkout',
+        razorpayPaymentId: paymentResponse.razorpay_payment_id,
+        razorpayOrderId:   paymentResponse.razorpay_order_id   || null,
+        razorpaySignature: paymentResponse.razorpay_signature   || null,
+        amount:            1200.00,
+        transactionAt:     new Date().toISOString(),
+        registrationAt:    new Date().toISOString()
+      };
+
+      registrationsRef.push(payload)
+        .then(() => {
+          hidePayLoading();         // ← hide loading ONLY after everything is saved
+          showSuccessModal(payload);
+          form.reset();
+          document.getElementById('form-status').textContent = '';
+          document.querySelector('input[name="role"][value="Church Leadership/Other"]').checked = true;
+        })
+        .catch(err => {
+          console.error(err);
+          hidePayLoading();
+          document.getElementById('form-status').textContent = 'Payment successful but error saving registration. Please contact support.';
+          document.getElementById('form-status').style.color = '#f59e0b';
+        });
+    }
+
+    function showSuccessModal(payload) {
+      document.getElementById('confirmationCode').textContent = payload.confirmationCode;
+      document.getElementById('certUserName').textContent     = payload.fullName;
+      document.getElementById('successDetails').innerHTML = `
+        <div><strong>Name:</strong> ${payload.fullName}</div>
+        <div><strong>Email:</strong> ${payload.email}</div>
+        <div><strong>Phone:</strong> ${payload.phone}</div>
+        <div><strong>Church:</strong> ${payload.church}</div>
+        <div><strong>Location:</strong> ${payload.location}</div>
+        <div><strong>Role:</strong> ${payload.role}</div>
+        <div style="margin-top:10px;"><strong>Amount Paid:</strong> ₹${payload.amount}</div>
+        <div><strong>Transaction ID:</strong> ${payload.razorpayPaymentId}</div>
+        <div style="margin-top:8px; color:limegreen;"><strong>Status:</strong> Payment Confirmed ✓</div>`;
+
+      currentCertificateData = payload;
+
+      document.getElementById('qrcodeContainer').innerHTML = '<div id="qrcode"></div>';
+      const verificationUrl = `${window.location.origin}/verify.html?code=${payload.confirmationCode}`;
+      new QRCode(document.getElementById('qrcode'), { text: verificationUrl, width: 160, height: 160, colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H });
+
+      openModal(document.getElementById('successModal'));
+    }
+
+    // ── SHARE ──
+    document.getElementById('shareBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      document.getElementById('shareOptions').classList.toggle('show');
+    });
+    document.addEventListener('click', function (e) {
+      const shareOptions = document.getElementById('shareOptions');
+      if (e.target !== document.getElementById('shareBtn') && !shareOptions.contains(e.target))
+        shareOptions.classList.remove('show');
+    });
+
+    function shareToWhatsApp() {
+      if (!currentCertificateData) return;
+      const url  = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      const text = `🎉 I just registered for the Church Media Workshop!\n\n📋 Confirmation Code: ${currentCertificateData.confirmationCode}\n👤 Name: ${currentCertificateData.fullName}\n📍 Location: ${currentCertificateData.location}\n💰 Amount: ₹${currentCertificateData.amount}\n\n👉 Scan or click: ${url}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+    function shareToFacebook() {
+      if (!currentCertificateData) return;
+      const url = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+    }
+    function shareToInstagram() {
+      if (!currentCertificateData) return;
+      html2canvas(document.getElementById('certificateDiv'), { backgroundColor: '#000000', scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.href     = canvas.toDataURL('image/png');
+        link.download = `${currentCertificateData.confirmationCode}_workshop_pass.png`;
+        link.click();
+        alert('📱 Image downloaded!\n\n1. Open Instagram\n2. Create a new post\n3. Upload the image\n4. Add caption: "🎉 I just registered for the Church Media Workshop! #RuachMedia #MediaWorkshop"');
+      });
+    }
     function shareToTwitter() {
-      if(!currentCertificateData) return;
-      const verificationUrl = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
-      const text = `🎉 I just registered for the Church Media Workshop with @RuachMedia! Check my registration: ${verificationUrl} #ChurchTech #MediaWorkshop`;
+      if (!currentCertificateData) return;
+      const url  = `${window.location.origin}/verify.html?code=${currentCertificateData.confirmationCode}`;
+      const text = `🎉 I just registered for the Church Media Workshop with @RuachMedia! Check my registration: ${url} #ChurchTech #MediaWorkshop`;
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // ===== DOWNLOAD CERTIFICATE =====
-    document.getElementById('downloadCertBtn').addEventListener('click', async function() {
-      const certificateDiv = document.getElementById('certificateDiv');
-      const btn = document.getElementById('downloadCertBtn');
-
-      btn.textContent = '⏳ Creating image...';
+    // ── DOWNLOAD CERTIFICATE ──
+    document.getElementById('downloadCertBtn').addEventListener('click', async function () {
+      const btn = this;
+      btn.textContent = '⏳ Creating image…';
       btn.disabled = true;
-
       try {
-        const canvas = await html2canvas(certificateDiv, {
-          backgroundColor: '#000000',
-          scale: 2
-        });
-        const link = document.createElement('a');
-        const confirmCode = document.getElementById('confirmationCode').textContent;
-        link.href = canvas.toDataURL('image/png');
-        link.download = `${confirmCode}_workshop_pass.png`;
+        const canvas = await html2canvas(document.getElementById('certificateDiv'), { backgroundColor: '#000000', scale: 2 });
+        const link   = document.createElement('a');
+        link.href     = canvas.toDataURL('image/png');
+        link.download = `${document.getElementById('confirmationCode').textContent}_workshop_pass.png`;
         link.click();
-
         btn.textContent = '✓ Image saved!';
-        setTimeout(() => {
-          btn.textContent = '📥 Save as Image';
-          btn.disabled = false;
-        }, 2000);
-      } catch(err) {
+        setTimeout(() => { btn.textContent = '📥 Save as Image'; btn.disabled = false; }, 2000);
+      } catch (err) {
         console.error(err);
         btn.textContent = '❌ Error saving image';
         btn.disabled = false;
       }
     });
 
-    // ===== DONE / CLOSE BUTTONS =====
-    document.getElementById('successDoneBtn').addEventListener('click', function(){
+    // ── DONE / CLOSE BUTTONS ──
+    document.getElementById('successDoneBtn').addEventListener('click', () => {
       closeModal(document.getElementById('successModal'));
       document.getElementById('shareOptions').classList.remove('show');
     });
+    document.getElementById('errorDoneBtn').addEventListener('click',  () => closeModal(document.getElementById('errorModal')));
+    document.getElementById('errorCloseBtn').addEventListener('click', () => closeModal(document.getElementById('errorModal')));
 
-    document.getElementById('errorDoneBtn').addEventListener('click', function(){
-      closeModal(document.getElementById('errorModal'));
-    });
-
-    document.getElementById('errorCloseBtn').addEventListener('click', function(){
-      closeModal(document.getElementById('errorModal'));
-    });
-
-    // ===== REVEAL ANIMATIONS =====
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          e.target.classList.add('in-view');
-          io.unobserve(e.target);
-        }
+    // ── ROLE OPTION CLICKS ──
+    document.querySelectorAll('.option').forEach(label => {
+      label.addEventListener('click', function () {
+        const radio = label.querySelector('input[type="radio"]');
+        if (radio && !radio.checked) { radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles: true })); }
       });
-    }, { root:null, rootMargin:'0px', threshold:0.12 });
+    });
 
+    // ── REVEAL ANIMATION ─���
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+    }, { root: null, rootMargin: '0px', threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // ===== HEADER SCROLL BEHAVIOR =====
-    (function headerScrollHandler(){
-      const headerEl = document.querySelector('header.topbar');
-      let ticking = false;
+    // ── HEADER SCROLL ──
+    (function () {
+      const headerEl  = document.querySelector('header.topbar');
+      let ticking     = false;
       let scrollTimer = null;
       window.addEventListener('scroll', () => {
-        if(!ticking){
+        if (!ticking) {
           window.requestAnimationFrame(() => {
             const y = window.scrollY || window.pageYOffset;
-            if(y > 30) headerEl.classList.add('scrolled');
-            else headerEl.classList.remove('scrolled');
+            headerEl.classList.toggle('scrolled', y > 30);
             document.body.classList.add('scrolling');
             clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(()=>{ document.body.classList.remove('scrolling'); }, 160);
+            scrollTimer = setTimeout(() => document.body.classList.remove('scrolling'), 160);
             ticking = false;
           });
           ticking = true;
@@ -1080,15 +1445,13 @@ and volunteers.</p>
       }, { passive: true });
     })();
 
-    // ===== ESC KEY CLOSES MODALS / MENU =====
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open, .contact-modal.open')
-          .forEach(m => closeModal(m));
-        if(menuPanel.classList.contains('open')) closeMenu();
+    // ── ESC KEY ──
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.success-modal.open, .error-modal.open, .check-status-modal.open, .contact-modal.open').forEach(m => closeModal(m));
+        if (menuPanel.classList.contains('open')) closeMenu();
       }
     });
-
   </script>
 </body>
 </html>
