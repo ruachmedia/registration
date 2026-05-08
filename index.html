@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Church Media Workshop — Registration</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Inventory Management</title>
   <style>
     :root{
       --bg: #0b0f14;
@@ -646,7 +646,7 @@ and volunteers.</p>
           </div>
 
           <div class="submit-wrap">
-            <button type="button" class="submit-btn" id="payNowBtn">Pay Now (₹1200)</button>
+            <button type="button" class="submit-btn" id="payNowBtn">Pay Now (₹799)</button>
           </div>
 
           <div id="form-status" aria-live="polite" style="margin-top:10px; text-align:center; font-size:13px;"></div>
@@ -821,7 +821,7 @@ and volunteers.</p>
     const workshopRef       = db.ref('workshopDetails');
 
     const RAZORPAY_KEY    = 'rzp_live_SFPgatX34SQ1qU';
-    const PAYMENT_AMOUNT  = 1200 * 100; // paise
+    const PAYMENT_AMOUNT  = 799 * 100; // paise
 
     let currentCertificateData = null;
 
@@ -830,11 +830,36 @@ and volunteers.</p>
     function showPayLoading()  { payLoadingOverlay.classList.add('active');    document.body.style.overflow = 'hidden'; }
     function hidePayLoading()  { payLoadingOverlay.classList.remove('active'); document.body.style.overflow = ''; }
 
+    // ── Date formatting with ordinal suffix ──
+    function formatDateWithOrdinal(dateString) {
+      if (!dateString) return '[Insert Date]';
+      try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString; // Return original if invalid date
+        
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        // Add ordinal suffix
+        let suffix = 'th';
+        if (day === 1 || day === 21 || day === 31) suffix = 'st';
+        else if (day === 2 || day === 22) suffix = 'nd';
+        else if (day === 3 || day === 23) suffix = 'rd';
+        
+        const dayWithSuffix = day.toString().padStart(2, '0') + suffix;
+        return `${month} ${dayWithSuffix} ${year}`;
+      } catch (e) {
+        return dateString;
+      }
+    }
+
     // ── Load workshop details ──
     workshopRef.on('value', snapshot => {
       if (snapshot.exists()) {
         const d = snapshot.val();
-        document.getElementById('workshopDate').textContent     = d.workshopDate     || '[Insert Date]';
+        document.getElementById('workshopDate').textContent     = formatDateWithOrdinal(d.workshopDate) || '[Insert Date]';
         document.getElementById('workshopCheckin').textContent  = d.checkinTime      || '8:45 AM';
         document.getElementById('workshopStart').textContent    = d.sessionStartTime || '9:00 AM';
         document.getElementById('workshopLocation').textContent = d.location         || '[Insert Location]';
@@ -1032,7 +1057,7 @@ function displaySingleAccountWithQR(record, resultEl) {
       <div class="status-detail"><strong>⛪ Church:</strong> ${record.church}</div>
       <div class="status-detail"><strong>📍 Location:</strong> ${record.location}</div>
       <div class="status-detail"><strong>🎯 Role:</strong> ${record.role}</div>
-      <div class="status-detail"><strong>💰 Amount:</strong> ₹${record.amount || 1200}</div>
+      <div class="status-detail"><strong>💰 Amount:</strong> ₹${record.amount || 799}</div>
       ${statusBadge}
       <div style="background:white;padding:8px;border-radius:6px;margin-top:12px;text-align:center;" id="statusQrCode"></div>
       <button class="submit-btn" id="doneBtn" style="margin-top:12px;width:100%;">Done</button>
@@ -1300,7 +1325,7 @@ document.getElementById('statusInput').addEventListener('keypress', (e) => {
         razorpayPaymentId: paymentResponse.razorpay_payment_id,
         razorpayOrderId:   paymentResponse.razorpay_order_id   || null,
         razorpaySignature: paymentResponse.razorpay_signature   || null,
-        amount:            1200.00,
+        amount:            799.00,
         transactionAt:     new Date().toISOString(),
         registrationAt:    new Date().toISOString()
       };
