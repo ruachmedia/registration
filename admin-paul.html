@@ -1548,12 +1548,14 @@ function viewMessage(id){
   const fromEmail=msg.email||msg.from||msg.senderEmail||'N/A';
   const fromName=msg.name||msg.fullName||msg.senderName||'';
 
+  const fromPhone=msg.phone||msg.phoneNumber||msg.contactPhone||'';
   $('messageDetail').innerHTML=`
     <div class="detail-row">
       <div class="detail-label">📧 From (Email)</div>
       <div class="detail-value highlight">${fromEmail}</div>
     </div>
     ${fromName?`<div class="detail-row"><div class="detail-label">👤 Name</div><div class="detail-value">${fromName}</div></div>`:''}
+    ${fromPhone?`<div class="detail-row"><div class="detail-label">📱 Phone</div><div class="detail-value highlight">${fromPhone}</div></div>`:''}
     <div class="detail-row">
       <div class="detail-label">📅 Date & Time</div>
       <div class="detail-value">${date}</div>
